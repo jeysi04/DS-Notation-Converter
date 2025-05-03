@@ -28,7 +28,7 @@ typedef struct Stack {
     int capacity;
 } Stack;
 
-/* Function prototypes */
+// Function prototypes
 TreeNode* createNode(char data);
 Stack* createStack(int capacity);
 void push(Stack *stack, TreeNode *node);
@@ -51,38 +51,46 @@ void printHelp();
 void printGuide();
 
 int main(int argc, char *argv[]) {
-    /* Initialize variables to store command line arguments */
+    // Initialize variables to store command line arguments
     char *inputExpr = NULL;
     char *fromFormat = NULL;
     char *toFormat = NULL;
     bool showHelp = false;
     bool showGuide = false;
 
-    /* Parse command line arguments */
+    // Parse command line arguments
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--from") == 0) {
-            /* Handle --from format argument */
+            // Handle --from format argument
             if (i + 1 < argc) {
                 fromFormat = argv[++i];
             }
         } else if (strcmp(argv[i], "--to") == 0) {
-            /* Handle --to format argument */
+            // Handle --to format argument
             if (i + 1 < argc) {
                 toFormat = argv[++i];
             }
         } else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-            /* Handle help flag */
+            // Handle help flag
             showHelp = true;
         } else if (strcmp(argv[i], "--guide") == 0) {
-            /* Handle guide flag */
+            // Handle guide flag
             showGuide = true;
-        } else if (argv[i][0] != '-') {
-            /* Handle expression argument (anything not starting with -) */
+        } else {
+            // Handle expression argument
+
+            // Check for expressions not enclosed in double quotes - treated as multiple arguments
+            if (inputExpr != NULL) {
+                printf("Error: Multiple expressions provided.\n");
+                return 1;
+            }
+
+            // Assign the expression to inputExpr
             inputExpr = argv[i];
         }
     }
 
-    /* Show help or guide if requested and exit */
+    // Show help or guide if requested and exit
     if (showHelp) {
         printHelp();
         return 0;
@@ -93,7 +101,7 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    /* Validate that all required arguments are present */
+    // Validate required arguments
     if (!inputExpr || !fromFormat || !toFormat) {
         printf("Error: Missing required arguments.\n");
         printf("Usage: %s --from <input_format> --to <output_format> \"<expression>\"\n", argv[0]);
@@ -101,24 +109,24 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    /* Validate input format specifier */
+    // Validate input format specifier
     if (strcmp(fromFormat, "infix") != 0 && strcmp(fromFormat, "prefix") != 0 && strcmp(fromFormat, "postfix") != 0) {
         printf("Error: Invalid input format '%s'. Must be infix, prefix, or postfix.\n", fromFormat);
         return 1;
     }
 
-    /* Validate output format specifier */
+    // Validate output format specifier
     if (strcmp(toFormat, "infix") != 0 && strcmp(toFormat, "prefix") != 0 && strcmp(toFormat, "postfix") != 0) {
         printf("Error: Invalid output format '%s'. Must be infix, prefix, or postfix.\n", toFormat);
         return 1;
     }
 
-    /* Validate the expression syntax */
+    // Validate the expression syntax
     if (!validateExpression(inputExpr, fromFormat)) {
         return 1;
     }
 
-    /* Build the expression tree based on input format */
+    // Build the expression tree based on input format
     TreeNode *root = NULL;
     if (strcmp(fromFormat, "postfix") == 0) {
         root = buildTreeFromPostfix(inputExpr);
@@ -128,13 +136,13 @@ int main(int argc, char *argv[]) {
         root = buildTreeFromInfix(inputExpr);
     }
 
-    /* Check if tree construction was successful */
+    // Check if tree construction was successful
     if (!root) {
         printf("Error: Failed to build expression tree.\n");
         return 1;
     }
 
-    /* Generate output based on requested format */
+    // Generate output based on requested format
     if (strcmp(toFormat, "infix") == 0) {
         printf("Converted expression: ");
         inorderTraversal(root);
@@ -149,7 +157,7 @@ int main(int argc, char *argv[]) {
         printf("\n");
     }
 
-    /* Clean up memory */
+    // Free the allocated memory for the expression tree
     freeTree(root);
 
     return 0;
@@ -249,7 +257,7 @@ int precedence(char op) {
     return 0;
 }
 
-/* Helper function to count tokens */
+// Helper function to count tokens
 int countTokens(const char *str) {
     int count = 0;
     bool inToken = false;
@@ -266,7 +274,7 @@ int countTokens(const char *str) {
     return count;
 }
 
-/* Helper function to get next token */
+// Helper function to get next token
 const char* getNextToken(const char *str, char *token) {
     while (*str && isspace(*str)) str++;
     
@@ -284,11 +292,11 @@ const char* getNextToken(const char *str, char *token) {
  *   Pointer to root of constructed tree, or NULL on failure
  */
 TreeNode* buildTreeFromPostfix(char *postfix) {
-    /* Create stack with capacity for all tokens */
+    // Create stack with capacity for all tokens
     Stack *stack = createStack(strlen(postfix));
     if (!stack) return NULL;
 
-    /* Tokenize the postfix expression */
+    // Tokenize the postfix expression
     char token;
     const char *ptr = postfix;
     while (ptr = getNextToken(ptr, &token)) {
@@ -326,39 +334,39 @@ TreeNode* buildTreeFromPostfix(char *postfix) {
  *   Pointer to root of constructed tree, or NULL on failure
  */
 TreeNode* buildTreeFromPrefix(char *prefix) {
-    /* Create stack with capacity for all tokens */
+    // Create stack with capacity for all tokens
     Stack *stack = createStack(strlen(prefix));
     if (!stack) return NULL;
 
-    /* Temporary storage for tokens */
-    char tokens[100][2]; /* Assume max 100 tokens, each max 1 char + null terminator */
+    // Temporary storage for tokens
+    char tokens[100][2];            // Assume max 100 tokens, each max 1 char + null terminator
     int tokenCount = 0;
     
-    /* Manual tokenization */
+    // Manual tokenization
     const char *ptr = prefix;
     while (*ptr) {
-        /* Skip whitespace */
+        // Skip whitespace
         while (*ptr && isspace(*ptr)) ptr++;
         if (!*ptr) break;
         
-        /* Store token */
+        // Store token
         tokens[tokenCount][0] = *ptr;
         tokens[tokenCount][1] = '\0';
         tokenCount++;
         ptr++;
     }
 
-    /* Process tokens in reverse order */
+    // Process tokens in reverse order
     for (int i = tokenCount - 1; i >= 0; i--) {
         char c = tokens[i][0];
         TreeNode *node = createNode(c);
 
         if (isOperator(c)) {
-            /* For operators: pop two operands and make them children */
+            // For operators: pop two operands and make them children
             node->left = pop(stack);
             node->right = pop(stack);
             if (!node->left || !node->right) {
-                /* Not enough operands for operator */
+                // Not enough operands for operator
                 free(node);
                 free(stack->items);
                 free(stack);
@@ -366,16 +374,16 @@ TreeNode* buildTreeFromPrefix(char *prefix) {
             }
         }
 
-        /* Push node onto stack (operator with children or operand) */
+        // Push node onto stack (operator with children or operand)
         push(stack, node);
     }
 
-    /* Final tree is the only node left on stack */
+    // Final tree is the only node left on stack
     TreeNode *root = pop(stack);
     free(stack->items);
     free(stack);
 
-    /* If stack isn't empty, expression was malformed */
+    // If stack isn't empty, expression was malformed
     if (!isEmpty(stack)) {
         freeTree(root);
         return NULL;
@@ -392,11 +400,11 @@ TreeNode* buildTreeFromPrefix(char *prefix) {
  *   Pointer to root of constructed tree, or NULL on failure
  */
 TreeNode* buildTreeFromInfix(char *infix) {
-    /* First convert infix to postfix notation */
+    // First convert infix to postfix notation
     char *postfix = infixToPostfix(infix);
     if (!postfix) return NULL;
     
-    /* Then build tree from postfix notation */
+    // Then build tree from postfix notation
     TreeNode *root = buildTreeFromPostfix(postfix);
     free(postfix);
     return root;
@@ -410,12 +418,12 @@ TreeNode* buildTreeFromInfix(char *infix) {
  *   String containing postfix expression, or NULL on failure
  */
 char* infixToPostfix(char *infix) {
-    /* Create operator stack */
+    // Create operator stack
     Stack *opStack = createStack(strlen(infix));
     if (!opStack) return NULL;
 
-    /* Allocate memory for postfix expression */
-    char *postfix = (char*)malloc(2 * strlen(infix) + 1); /* Enough space */
+    // Allocate memory for postfix expression
+    char *postfix = (char*)malloc(2 * strlen(infix) + 1);   // Enough space
     if (!postfix) {
         free(opStack->items);
         free(opStack);
@@ -424,10 +432,10 @@ char* infixToPostfix(char *infix) {
     postfix[0] = '\0';
     size_t postfix_len = 0;
 
-    /* Manual tokenization */
+    // Manual tokenization
     const char *ptr = infix;
     while (*ptr) {
-        /* Skip whitespace */
+        // Skip whitespace
         while (*ptr && isspace(*ptr)) ptr++;
         if (!*ptr) break;
         
@@ -435,32 +443,32 @@ char* infixToPostfix(char *infix) {
         ptr++;
 
         if (isdigit(c)) {
-            /* Operand - add to output */
+            // Operand - add to output
             postfix[postfix_len++] = c;
             postfix[postfix_len++] = ' ';
         } else if (c == '(') {
-            /* Left parenthesis - push to stack */
+            // Left parenthesis - push to stack
             TreeNode *node = createNode(c);
             push(opStack, node);
         } else if (c == ')') {
-            /* Right parenthesis - pop until matching '(' */
+            // Right parenthesis - pop until matching '('
             while (!isEmpty(opStack) && opStack->items[opStack->top]->data != '(') {
                 postfix[postfix_len++] = pop(opStack)->data;
                 postfix[postfix_len++] = ' ';
             }
             
             if (isEmpty(opStack)) {
-                /* Mismatched parentheses */
+                // Mismatched parentheses
                 free(postfix);
                 free(opStack->items);
                 free(opStack);
                 return NULL;
             }
             
-            /* Pop the '(' */
+            // Pop the '('
             free(pop(opStack));
         } else if (isOperator(c)) {
-            /* Operator - pop higher or equal precedence operators */
+            // Operator - pop higher or equal precedence operators from stack
             while (!isEmpty(opStack) && opStack->items[opStack->top]->data != '(' && 
                    precedence(opStack->items[opStack->top]->data) >= precedence(c)) {
                 postfix[postfix_len++] = pop(opStack)->data;
@@ -471,10 +479,10 @@ char* infixToPostfix(char *infix) {
         }
     }
 
-    /* Pop remaining operators from stack */
+    // Pop remaining operators from stack
     while (!isEmpty(opStack)) {
         if (opStack->items[opStack->top]->data == '(') {
-            /* Mismatched parentheses */
+            // Mismatched parentheses
             free(postfix);
             free(opStack->items);
             free(opStack);
@@ -484,13 +492,13 @@ char* infixToPostfix(char *infix) {
         postfix[postfix_len++] = ' ';
     }
 
-    /* Remove trailing space if any */
+    // Remove trailing space if any
     if (postfix_len > 0 && postfix[postfix_len-1] == ' ') {
         postfix_len--;
     }
     postfix[postfix_len] = '\0';
 
-    /* Clean up stack */
+    // Clean up stack
     free(opStack->items);
     free(opStack);
     return postfix;
@@ -522,9 +530,9 @@ void inorderTraversal(TreeNode *root) {
  */
 void preorderTraversal(TreeNode *root) {
     if (!root) return;
-    printf("%c ", root->data);  /* Visit node */
-    preorderTraversal(root->left);  /* Traverse left subtree */
-    preorderTraversal(root->right); /* Traverse right subtree */
+    printf("%c ", root->data);          // Visit node
+    preorderTraversal(root->left);      // Traverse left subtree
+    preorderTraversal(root->right);     // Traverse right subtree
 }
 
 /*
@@ -534,9 +542,9 @@ void preorderTraversal(TreeNode *root) {
  */
 void postorderTraversal(TreeNode *root) {
     if (!root) return;
-    postorderTraversal(root->left);  /* Traverse left subtree */
-    postorderTraversal(root->right); /* Traverse right subtree */
-    printf("%c ", root->data); /* Visit node */
+    postorderTraversal(root->left);     // Traverse left subtree
+    postorderTraversal(root->right);    // Traverse right subtree
+    printf("%c ", root->data);          // Visit node
 }
 
 /*
@@ -568,7 +576,7 @@ bool validateExpression(char *expr, const char *format) {
     int operatorCount = 0;
     int operandCount = 0;
     int parenCount = 0;
-    bool lastWasSpace = true; // Track if current character is preceded by space
+    bool lastWasSpace = true;   // Track if current character is preceded by space
     
     while (*expr) {
         if (isspace(*expr)) {
@@ -577,7 +585,7 @@ bool validateExpression(char *expr, const char *format) {
             continue;
         }
         
-        // We found a non-space character
+        // Check for space between tokens
         if (!lastWasSpace) {
             printf("Error: Missing space between tokens at '%c'.\n", *expr);
             return false;
@@ -600,7 +608,7 @@ bool validateExpression(char *expr, const char *format) {
         }
     }
     
-    /* Validate structure based on format */
+    // Validate structure based on format
     if (strcmp(format, "infix") == 0) {
         if (operandCount != operatorCount + 1) {
             printf("Error: Invalid operator/operand balance in infix expression.\n");
@@ -668,7 +676,7 @@ void printGuide() {
     printf("Command-Line Options:\n");
     printf("  --from <format>        Specify input format (infix, prefix, or postfix)\n");
     printf("  --to <format>          Specify output format (infix, prefix, or postfix)\n");
-    printf("  \"<expression>\"         Space-separated expression string in quotes\n");
+    printf("  \"<expression>\"         Space-separated expression string in double quotes\n");
     printf("  -h, --help             Show brief usage help message\n");
     printf("  --guide                Show this detailed program guide\n\n");
 
