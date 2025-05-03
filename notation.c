@@ -64,7 +64,7 @@ Node* postfix_to_tree(char* postfix){
         char token = postfix[i];
 
         if(isASpace(token)){
-            continue;
+            i++;
         }
 
         if(isOperand(token)){
