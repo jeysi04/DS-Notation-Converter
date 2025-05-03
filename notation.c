@@ -254,7 +254,7 @@ void infix_to_prefix(const char* infix, char* prefix) {
 
 int main(int argc, char *argv[]) {
     // Error Handling
-    // Validate minimum number of arguments
+    // Validate correct number of arguments
     if (argc < 6) {
         printf("Error: Missing or incomplete arguments.\n");
         printf("Correct Syntax: notation-converter --from <format> --to <format> \"<expression>\"\n");
@@ -279,13 +279,17 @@ int main(int argc, char *argv[]) {
     }
 
     // Expression conversion handling
+    // Display Help instructions
     if (strcmp(argv[1], "--h") == 0) {
         printf("\nhelp...");
         // help function
+
+    // Display user's guide
     } else if (strcmp(argv[1], "--guide") == 0) {
         printf("\nguide...");
         // guide function
     } else if (strcmp(argv[1], "--from") == 0) {
+        //Infix to postfix
         if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "postfix") == 0)) {
             printf("%s\n", argv[5]);
 
@@ -293,6 +297,8 @@ int main(int argc, char *argv[]) {
             infix_to_postfix(argv[5], postfix);
 
             printf("Postfix expression: %s\n", postfix);
+
+        //Infix to prefix
         } else if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "prefix") == 0)) {
             printf("Infix expression: %s\n", argv[5]);
 
