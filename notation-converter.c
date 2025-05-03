@@ -78,7 +78,6 @@ int main(int argc, char *argv[]) {
             showGuide = true;
         } else {
             // Handle expression argument
-
             // Check for expressions not enclosed in double quotes - treated as multiple arguments
             if (inputExpr != NULL) {
                 printf("Error: Multiple expressions provided.\n");
