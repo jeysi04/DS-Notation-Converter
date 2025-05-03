@@ -213,7 +213,7 @@ int main(int argc, char *argv[]) {
                             printf("\n");
                     }
                     else
-                        printf("Invalid convertion.");
+                        printf("Invalid specifier.");
                 }
                 else
                     printf("Missing --to argument.");
