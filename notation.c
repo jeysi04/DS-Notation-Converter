@@ -138,6 +138,7 @@ void postorder_Traversal(Node* root) {
     printf("%c ", root->data);
 }
 
+//Infix to postfix
 int precedence(char op) {
     if (op == '+' || op == '-') return 1;
     if (op == '*' || op == '/') return 2;
@@ -145,34 +146,34 @@ int precedence(char op) {
 }
 
 void infix_to_postfix(const char* infix, char* postfix) {
-    Stack* opStack = NULL;
-    int j = 0;
+    Stack* opStack = NULL;  // Stack to store operators
+    int j = 0;              // Index for postfix output
 
     for (int i = 0; infix[i]; i++) {
         char token = infix[i];
 
         if (isASpace(token)) continue;  //Skips spaces
- 
+
+        // Append operand followed by space
         if (isOperand(token)) {
             postfix[j++] = token;
             postfix[j++] = ' ';
         }
-       
+        
         else if (isOperator(token)) {
-            while (opStack && isOperator(opStack->treeNode->data)) {
-                char topOp = opStack->treeNode->data;
-
-                if (precedence(topOp) > precedence(token)) {
-                    postfix[j++] = pop(&opStack)->data;
-                    postfix[j++] = ' ';
-                } else {
-                    break;
-                }
+            while (opStack && isOperator(opStack->treeNode->data) &&
+                   precedence(opStack->treeNode->data) >= precedence(token)) {
+                postfix[j++] = pop(&opStack)->data;
+                postfix[j++] = ' ';
             }
+
+            // Push current operator to stack
             push(&opStack, newNode(token));
         }
+        
     }
 
+    // Pop any remaining operators from the stack to postfix
     while (opStack) {
         postfix[j++] = pop(&opStack)->data;
         postfix[j++] = ' ';
@@ -182,6 +183,9 @@ void infix_to_postfix(const char* infix, char* postfix) {
     postfix[j] = '\0';
 }
 
+//Infix to Prefix
+
+// Utility to reverse a string
 void reverse(char* str) {
     int len = strlen(str);
     for (int i = 0; i < len / 2; i++) {
@@ -192,20 +196,67 @@ void reverse(char* str) {
 }
 
 void infix_to_prefix(const char* infix, char* prefix) {
-    char reversed[100], postfix[100];
+    char* operators[100];          // Stack for operators
+    char* operands[100];           // Stack for operand
+    int opTop = -1, valTop = -1;
+    int len = strlen(infix);
+    char token;
 
-    //Reverse infix expression
-    strcpy(reversed, infix);
-    reverse(reversed);
+    for (int i = 0; i < len; i++) {
+        token = infix[i];
 
+        if (isASpace(token)) continue;   // Skip whitespace
 
-    //Convert reversed infix to postfix
-    infix_to_postfix(reversed, postfix);
+        if (isOperand(token)) {
+            // Push operand  to operand stack
+            char* operand = (char*)malloc(2);
+            operand[0] = token;
+            operand[1] = '\0';
+            operands[++valTop] = operand;
+        }
+        else if (isOperator(token)) {
+            while (opTop != -1 && precedence(operators[opTop][0]) >= precedence(token)) {
+                // Pop operator and two operands
+                char* op = operators[opTop--];
+                char* op1 = operands[valTop--];
+                char* op2 = operands[valTop--];
 
-    //Reverse postfix to get prefix
-    strcpy(prefix, postfix);
-    reverse(prefix);
+                // Combine them: operator + operand1 + operand2
+                char* expr = (char*)malloc(strlen(op1) + strlen(op2) + 2 + 1);
+                sprintf(expr, "%c%s%s", op[0], op2, op1);
+
+                operands[++valTop] = expr;
+                free(op);
+                free(op1);
+                free(op2);
+            }
+            // Push current operator
+            char* op = (char*)malloc(2);
+            op[0] = token;
+            op[1] = '\0';
+            operators[++opTop] = op;
+        }
+    }
+
+    // Final pop
+    while (opTop != -1) {
+        char* op = operators[opTop--];
+        char* op1 = operands[valTop--];
+        char* op2 = operands[valTop--];
+
+        char* expr = (char*)malloc(strlen(op1) + strlen(op2) + 2 + 1);
+        sprintf(expr, "%c%s%s", op[0], op2, op1);
+
+        operands[++valTop] = expr;
+        free(op);
+        free(op1);
+        free(op2);
+    }
+
+    strcpy(prefix, operands[valTop]);
+    free(operands[valTop]);
 }
+
 
 int main(int argc, char *argv[]) {
     if (argc < 1) {
