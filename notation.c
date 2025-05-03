@@ -191,6 +191,30 @@ void infix_to_postfix(const char* infix, char* postfix) {
     postfix[j] = '\0';
 }
 
+void reverse(char* str) {
+    int len = strlen(str);
+    for (int i = 0; i < len / 2; i++) {
+        char temp = str[i];
+        str[i] = str[len - i - 1];
+        str[len - i - 1] = temp;
+    }
+}
+
+void infix_to_prefix(const char* infix, char* prefix) {
+    char reversed[100], postfix[100];
+
+    //Reverse infix expression
+    strcpy(reversed, infix);
+    reverse(reversed);
+
+    //Convert reversed infix to postfix
+    infix_to_postfix(reversed, postfix);
+
+    //Reverse postfix to get prefix
+    strcpy(prefix, postfix);
+    reverse(prefix);
+}
+
 int main(int argc, char *argv[]) {
     if (argc < 1) {
         printf("No arguments passed.\n");
@@ -213,10 +237,14 @@ int main(int argc, char *argv[]) {
 
                     printf("Postfix expression: %s\n", postfix);
                 }
-                 else if((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "prefix") == 0)){
-                        //infix_to_tree
-                        //infix_to_prefix
-                 }
+                 else if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "prefix") == 0)) {
+                    printf("Infix expression: %s\n", argv[5]);
+                
+                    char prefix[100];
+                    infix_to_prefix(argv[5], prefix);
+                
+                    printf("Prefix expression: %s\n", prefix);
+                }
                  else if((strcmp(argv[2], "prefix") == 0) && (strcmp(argv[4], "infix") == 0)){
                         //prefix_to_tree
                         int index = 0;
