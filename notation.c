@@ -181,7 +181,7 @@ void infix_to_postfix(const char* infix, char* postfix) {
         postfix[j++] = ' ';
     }
 
-    if (j > 0) j--;  // Remove trailing space
+    if (j > 0 && postfix[j - 1] == ' ') j--;  // Remove trailing space
     postfix[j] = '\0';
 }
 
