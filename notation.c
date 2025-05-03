@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 //defines a binary code with left and right child
 typedef struct Node{
     char data;
@@ -16,9 +15,9 @@ typedef struct Stack {
 } Stack;
 
 //creates new binary code
-Node* newNode(char data) {
-    Node* node = (Node*)malloc(sizeof(Node)); 
-    node->data = data;
+Node* newNode(char op) {
+    Node* node = (Node*)malloc(sizeof(Node));
+    node->data = op;
     node->left = node->right = NULL;
     return node;
 }
@@ -33,9 +32,8 @@ void push(Stack** top, Node* node) {
 
 //pops a tree node in the stack
 Node* pop(Stack** top) {
-    if (*top == NULL) 
-        return NULL; //underflow check
-
+    if (*top == NULL) return NULL; //underflow check
+    
     Stack* temp = *top; //store current top to temp
     *top = (*top)->next; //move top to next
     Node* node = temp->treeNode; //get the new tree node without the previous top
@@ -75,8 +73,9 @@ Node* postfix_to_tree(char* postfix){
     for(int i=0; postfix[i] != '\0'; i++){
         char token = postfix[i]; //each character is stored in token variable
 
-        if(isASpace(token)) //if space, increment index
+        if(isASpace(token)){ //if space, increment index
             i++;
+        }
 
         if(isOperand(token)){ // if char is operand, push to stack
             push(&stack, newNode(token));
@@ -91,11 +90,12 @@ Node* postfix_to_tree(char* postfix){
         }
     }
     return pop(&stack);
+
 }
 
 //function to skip spaces
 void skipSpaces(char* expr, int* index) {
-    while (isASpace(*index)) (*index)++;
+    while (expr[*index] == ' ') (*index)++;
 }
 
 //function to put the prefix expression in a binary tree
@@ -190,7 +190,7 @@ int main(int argc, char *argv[]) {
                         Node* root = postfix_to_tree(argv[5]);
 
                         printf("Infix expression: ");
-                        inorder_Traversal(root); 
+                        inorder_Traversal(root); // Should print: * + 2 3 + 4 5
                         printf("\n");
                  }
                  else if((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "prefix") == 0)){
@@ -211,8 +211,10 @@ int main(int argc, char *argv[]) {
                         postorder_Traversal(root); 
                         printf("\n");
                  }
-                 
+                 else
+                    printf("\nInvalid convertion.");
             }
+           
 
     }
     return 0;
