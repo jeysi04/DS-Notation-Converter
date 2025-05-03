@@ -254,6 +254,7 @@ void infix_to_prefix(const char* infix, char* prefix) {
 
 int main(int argc, char *argv[]) {
     // Error Handling
+    // Validate minimum number of arguments
     if (argc < 6) {
         printf("Error: Missing or incomplete arguments.\n");
         printf("Correct Syntax: notation-converter --from <format> --to <format> \"<expression>\"\n");
