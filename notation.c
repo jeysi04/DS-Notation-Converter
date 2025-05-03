@@ -84,7 +84,7 @@ Node* postfix_to_tree(char* postfix){
 }
 
 void skipSpaces(char* expr, int* index) {
-    while (expr[*index] == ' ') (*index)++;
+    while (isASpace(*index)) (*index)++;
 }
 
 Node* prefix_to_tree(char* expr, int* index) {
