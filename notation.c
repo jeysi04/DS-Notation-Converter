@@ -157,16 +157,7 @@ void infix_to_postfix(const char* infix, char* postfix) {
             postfix[j++] = token;
             postfix[j++] = ' ';
         }
-        else if (token == '(') {
-            push(&opStack, newNode(token));
-        }
-        else if (token == ')') {
-            while (opStack && opStack->treeNode->data != '(') {
-                postfix[j++] = pop(&opStack)->data;
-                postfix[j++] = ' ';
-            }
-            pop(&opStack);  // Remove '('
-        }
+       
         else if (isOperator(token)) {
             while (opStack && isOperator(opStack->treeNode->data)) {
                 char topOp = opStack->treeNode->data;
