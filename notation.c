@@ -179,25 +179,28 @@ int main(int argc, char *argv[]) {
                             int index = 0;
                             printf("%s\n", argv[5]);
                             Node* root = prefix_to_tree(argv[5], &index);
+
                             //prefix_to_infix
                             printf("Infix expression: ");
-                            inorder_Traversal(root); // Should print: * + 2 3 + 4 5
+                            inorder_Traversal(root); 
                             printf("\n");
                     }
                     else if((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "infix") == 0)){
-                            //postfix_to_infix
-
+                            //postfix_to_tree
                             printf("%s\n", argv[5]);
                             Node* root = postfix_to_tree(argv[5]);
 
+                            //postfix_to_inorder
                             printf("Infix expression: ");
-                            inorder_Traversal(root); // Should print: * + 2 3 + 4 5
+                            inorder_Traversal(root); 
                             printf("\n");
                     }
                     else if((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "prefix") == 0)){
+                            //postfix_to_tree
                             printf("%s\n", argv[5]);
                             Node* root = postfix_to_tree(argv[5]);
 
+                            //postfix_to_prefix
                             printf("Prefix expression: ");
                             preorder_Traversal(root); 
                             printf("\n");
@@ -207,6 +210,7 @@ int main(int argc, char *argv[]) {
                             int index = 0;
                             printf("%s\n", argv[5]);
                             Node* root = prefix_to_tree(argv[5], &index);
+                            
                             //prefix_to_postfix
                             printf("Postfix expression: ");
                             postorder_Traversal(root); 
