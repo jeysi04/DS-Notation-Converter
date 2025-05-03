@@ -194,6 +194,9 @@ int main(int argc, char *argv[]) {
                                 postorder_Traversal(root); 
                                 printf("\n");
                                 }
+                            else
+                                printf("Invalid format specifier '%s'", argv[4]);
+                            
                     }
                     else if((strcmp(argv[2], "postfix") == 0)){
                         if(strcmp(argv[4], "infix") == 0){
@@ -213,9 +216,11 @@ int main(int argc, char *argv[]) {
                             preorder_Traversal(root); 
                             printf("\n");
                         }
+                        else
+                                printf("Invalid format specifier '%s'.", argv[4]);
                     }
                     else
-                        printf("Invalid specifier.");
+                        printf("Invalid format specifier '%s'.", argv[2]);
                 }
                 else
                     printf("Missing --to argument.");
