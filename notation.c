@@ -50,6 +50,7 @@ int isOperator(char ch){
         return 0;
 }
 
+//checks if the character is a space
 int isASpace(char ch){
     if(ch == ' ')
         return 1;
@@ -83,8 +84,9 @@ Node* postfix_to_tree(char* postfix){
 
 }
 
+//function to skip spaces
 void skipSpaces(char* expr, int* index) {
-    while (isASpace(*index)) (*index)++;
+    while (expr[*index] == ' ') (*index)++;
 }
 
 Node* prefix_to_tree(char* expr, int* index) {
