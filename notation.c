@@ -168,8 +168,9 @@ int main(int argc, char *argv[]) {
                 if((strcmp(argv[3], "to") == 0)){
                     if(strcmp(argv[2], "infix") == 0){
                         if(strcmp(argv[4], "postfix") == 0){}
-                        //infix_to_tree
-                        //infix_to_postfix
+                        else if(strcmp(argv[4], "prefix") == 0){}
+                        else    
+                            printf("Invalid format specifier '%s'", argv[4]);
                     }
                     if(strcmp(argv[2], "prefix") == 0){
                             if(strcmp(argv[4], "infix") == 0){
@@ -219,8 +220,13 @@ int main(int argc, char *argv[]) {
                         else
                                 printf("Invalid format specifier '%s'.", argv[4]);
                     }
-                    else
-                        printf("Invalid format specifier '%s'.", argv[2]);
+                    else{
+                        if (strcmp(argv[4], "prefix") != 0 && strcmp(argv[4], "postfix") != 0 && strcmp(argv[4], "infix") != 0) {
+                            printf("Invalid format specifiers '%s' and '%s'.\n", argv[2], argv[4]);
+                        }
+                        else
+                            printf("Invalid format specifier '%s'.", argv[2]);
+                    }
                 }
                 else
                     printf("Missing --to argument.");
