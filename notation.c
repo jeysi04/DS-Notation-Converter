@@ -151,27 +151,17 @@ void infix_to_postfix(const char* infix, char* postfix) {
     for (int i = 0; infix[i]; i++) {
         char token = infix[i];
 
-        if (isASpace(token)) continue;  //Skips spaces
- 
+        if (isASpace(token)) continue;  // Skip spaces
+
         if (isOperand(token)) {
             postfix[j++] = token;
             postfix[j++] = ' ';
-        }
-        else if (token == '(') {
-            push(&opStack, newNode(token));
-        }
-        else if (token == ')') {
-            while (opStack && opStack->treeNode->data != '(') {
-                postfix[j++] = pop(&opStack)->data;
-                postfix[j++] = ' ';
-            }
-            pop(&opStack);  // Remove '('
         }
         else if (isOperator(token)) {
             while (opStack && isOperator(opStack->treeNode->data)) {
                 char topOp = opStack->treeNode->data;
 
-                if (precedence(topOp) > precedence(token)) {
+                if (precedence(topOp) >= precedence(token)) {
                     postfix[j++] = pop(&opStack)->data;
                     postfix[j++] = ' ';
                 } else {
