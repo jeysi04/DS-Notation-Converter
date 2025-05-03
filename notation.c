@@ -181,7 +181,7 @@ int main(int argc, char *argv[]) {
                             Node* root = prefix_to_tree(argv[5], &index);
                             //prefix_to_infix
                             printf("Infix expression: ");
-                            inorder_Traversal(root); // Should print: * + 2 3 + 4 5
+                            inorder_Traversal(root); 
                             printf("\n");
                     }
                     else if((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "infix") == 0)){
@@ -191,7 +191,7 @@ int main(int argc, char *argv[]) {
                             Node* root = postfix_to_tree(argv[5]);
 
                             printf("Infix expression: ");
-                            inorder_Traversal(root); // Should print: * + 2 3 + 4 5
+                            inorder_Traversal(root); 
                             printf("\n");
                     }
                     else if((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "prefix") == 0)){
