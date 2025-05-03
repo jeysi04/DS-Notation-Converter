@@ -620,7 +620,7 @@ bool validateExpression(char *expr, const char *format) {
     } 
     else if (strcmp(format, "postfix") == 0 || strcmp(format, "prefix") == 0) {
         if (operandCount != operatorCount + 1) {
-            printf("Error: Invalid operator/operand balance in %s expression.\n", format);
+            printf("Error: Malformed %s expression.\n", format);
             return false;
         }
         if (parenCount > 0) {
