@@ -166,51 +166,53 @@ int main(int argc, char *argv[]) {
                 //guide function
             else if(strcmp(argv[1], "--from" ) == 0){
                 if((strcmp(argv[3], "to") == 0)){
-                    if((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "postfix") == 0)){
+                    if(strcmp(argv[2], "infix") == 0){
+                        if(strcmp(argv[4], "postfix") == 0){}
                         //infix_to_tree
                         //infix_to_postfix
                     }
-                    else if((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "prefix") == 0)){
-                            //infix_to_tree
-                            //infix_to_prefix
-                    }
-                    else if((strcmp(argv[2], "prefix") == 0) && (strcmp(argv[4], "infix") == 0)){
-                            //prefix_to_tree
-                            int index = 0;
-                            printf("%s\n", argv[5]);
-                            Node* root = prefix_to_tree(argv[5], &index);
-                            //prefix_to_infix
-                            printf("Infix expression: ");
-                            inorder_Traversal(root); 
-                            printf("\n");
-                    }
-                    else if((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "infix") == 0)){
-                            //postfix_to_infix
+                    if(strcmp(argv[2], "prefix") == 0){
+                            if(strcmp(argv[4], "infix") == 0){
+                                //prefix_to_tree
+                                int index = 0;
+                                printf("%s\n", argv[5]);
+                                Node* root = prefix_to_tree(argv[5], &index);
+                                
+                                //prefix_to_infix
+                                printf("Infix expression: ");
+                                inorder_Traversal(root); 
+                                printf("\n");
+                            }
+                            else if(strcmp(argv[4], "postfix") == 0){
+                                //prefix_to_tree
+                                int index = 0;
+                                printf("%s\n", argv[5]);
+                                Node* root = prefix_to_tree(argv[5], &index);
 
+                                //prefix_to_postfix
+                                printf("Postfix expression: ");
+                                postorder_Traversal(root); 
+                                printf("\n");
+                                }
+                    }
+                    else if((strcmp(argv[2], "postfix") == 0)){
+                        if(strcmp(argv[4], "infix") == 0){
+                            //postfix_to_infix
                             printf("%s\n", argv[5]);
                             Node* root = postfix_to_tree(argv[5]);
 
                             printf("Infix expression: ");
                             inorder_Traversal(root); 
                             printf("\n");
-                    }
-                    else if((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "prefix") == 0)){
+                        }
+                        else if(strcmp(argv[4], "prefix") == 0){
                             printf("%s\n", argv[5]);
                             Node* root = postfix_to_tree(argv[5]);
 
                             printf("Prefix expression: ");
                             preorder_Traversal(root); 
                             printf("\n");
-                    }
-                    else if((strcmp(argv[2], "prefix") == 0) && (strcmp(argv[4], "postfix") == 0)){
-                            //prefix_to_tree
-                            int index = 0;
-                            printf("%s\n", argv[5]);
-                            Node* root = prefix_to_tree(argv[5], &index);
-                            //prefix_to_postfix
-                            printf("Postfix expression: ");
-                            postorder_Traversal(root); 
-                            printf("\n");
+                        }
                     }
                     else
                         printf("Invalid specifier.");
