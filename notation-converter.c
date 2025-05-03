@@ -689,9 +689,9 @@ void printGuide() {
     printf("  1. The input expression is validated for correctness.\n");
     printf("  2. An expression tree is then built based on input notation.\n");
     printf("  3. The tree is traversed to produce output in the desired format:\n");
-    printf("     - In-order Traversal    ->  Infix (with parentheses)\n");
-    printf("     - Pre-order Traversal   ->  Prefix\n");
-    printf("     - Post-order Traversal  ->  Postfix\n\n");
+    printf("     - In-order Traversal    ->  Infix  Notation (with parentheses)\n");
+    printf("     - Pre-order Traversal   ->  Prefix Notation\n");
+    printf("     - Post-order Traversal  ->  Postfix Notation\n\n");
 
     printf("Input Requirements:\n");
     printf("  - Operands must be single-digit numbers (0-9).\n");
