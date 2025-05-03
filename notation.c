@@ -138,6 +138,59 @@ void postorder_Traversal(Node* root) {
     printf("%c ", root->data);
 }
 
+int precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    return 0;
+}
+
+void infix_to_postfix(const char* infix, char* postfix) {
+    Stack* opStack = NULL;
+    int j = 0;
+
+    for (int i = 0; infix[i]; i++) {
+        char token = infix[i];
+
+        if (isASpace(token)) continue;  //Skips spaces
+ 
+        if (isOperand(token)) {
+            postfix[j++] = token;
+            postfix[j++] = ' ';
+        }
+        else if (token == '(') {
+            push(&opStack, newNode(token));
+        }
+        else if (token == ')') {
+            while (opStack && opStack->treeNode->data != '(') {
+                postfix[j++] = pop(&opStack)->data;
+                postfix[j++] = ' ';
+            }
+            pop(&opStack);  // Remove '('
+        }
+        else if (isOperator(token)) {
+            while (opStack && isOperator(opStack->treeNode->data)) {
+                char topOp = opStack->treeNode->data;
+
+                if (precedence(topOp) > precedence(token)) {
+                    postfix[j++] = pop(&opStack)->data;
+                    postfix[j++] = ' ';
+                } else {
+                    break;
+                }
+            }
+            push(&opStack, newNode(token));
+        }
+    }
+
+    while (opStack) {
+        postfix[j++] = pop(&opStack)->data;
+        postfix[j++] = ' ';
+    }
+
+    if (j > 0) j--;  // Remove trailing space
+    postfix[j] = '\0';
+}
+
 int main(int argc, char *argv[]) {
     if (argc < 1) {
         printf("No arguments passed.\n");
@@ -149,11 +202,17 @@ int main(int argc, char *argv[]) {
             else if(strcmp(argv[1], "--guide") == 0)
                 printf("\nguide...");
                 //guide function
-            else if(strcmp(argv[1], "--from") == 0){
-                 if((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "postfix") == 0)){
-                        //infix_to_tree
-                        //infix_to_postfix
-                 }
+            else if (strcmp(argv[1], "--from") == 0) {
+                if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "postfix") == 0)) {
+                    //infix_to_tree
+                    //infix_to_postfix
+                    printf("%s\n", argv[5]);
+    
+                    char postfix[100];
+                    infix_to_postfix(argv[5], postfix);
+
+                    printf("Postfix expression: %s\n", postfix);
+                }
                  else if((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "prefix") == 0)){
                         //infix_to_tree
                         //infix_to_prefix
