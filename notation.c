@@ -57,6 +57,7 @@ int isASpace(char ch){
         return 0;
 }
 
+
 Node* postfix_to_tree(char* postfix){
     Stack* stack = NULL;
     for(int i=0; postfix[i] != '\0'; i++){
@@ -80,6 +81,28 @@ Node* postfix_to_tree(char* postfix){
     }
     return pop(&stack);
 
+}
+
+void skipSpaces(char* expr, int* index) {
+    while (expr[*index] == ' ') (*index)++;
+}
+
+Node* prefix_to_tree(char* expr, int* index) {
+    skipSpaces(expr, index);
+    char ch = expr[*index];
+
+    if (ch == '\0') return NULL;
+
+    Node* node = newNode(ch);
+    (*index)++;  // Move past current char
+    skipSpaces(expr, index);
+
+    if (isOperator(ch)) {
+        node->left = prefix_to_tree(expr, index);
+        node->right = prefix_to_tree(expr, index);
+    }
+
+    return node;
 }
 
 void preorder_Traversal(Node* root) {
@@ -107,6 +130,14 @@ void inorder_Traversal(Node* root) {
     }
 }
 
+void postorder_Traversal(Node* root) {
+    if (root == NULL) return;
+
+    postorder_Traversal(root->left);
+    postorder_Traversal(root->right);
+    printf("%c ", root->data);
+}
+
 int main(int argc, char *argv[]) {
     if (argc < 1) {
         printf("No arguments passed.\n");
@@ -129,7 +160,13 @@ int main(int argc, char *argv[]) {
                  }
                  else if((strcmp(argv[2], "prefix") == 0) && (strcmp(argv[4], "infix") == 0)){
                         //prefix_to_tree
+                        int index = 0;
+                        printf("%s\n", argv[5]);
+                        Node* root = prefix_to_tree(argv[5], &index);
                         //prefix_to_infix
+                        printf("Infix expression: ");
+                        inorder_Traversal(root); // Should print: * + 2 3 + 4 5
+                        printf("\n");
                  }
                  else if((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "infix") == 0)){
                         //postfix_to_infix
@@ -146,12 +183,18 @@ int main(int argc, char *argv[]) {
                         Node* root = postfix_to_tree(argv[5]);
 
                         printf("Prefix expression: ");
-                        preorder_Traversal(root); // Should print: * + 2 3 + 4 5
+                        preorder_Traversal(root); 
                         printf("\n");
                  }
                  else if((strcmp(argv[2], "prefix") == 0) && (strcmp(argv[4], "postfix") == 0)){
                         //prefix_to_tree
+                        int index = 0;
+                        printf("%s\n", argv[5]);
+                        Node* root = prefix_to_tree(argv[5], &index);
                         //prefix_to_postfix
+                        printf("Postfix expression: ");
+                        postorder_Traversal(root); 
+                        printf("\n");
                  }
             }
 
