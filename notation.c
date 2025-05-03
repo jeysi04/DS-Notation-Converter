@@ -14,7 +14,7 @@ typedef struct Stack {
     struct Stack *next;
 } Stack;
 
-//creates new binary code
+//creates new binary node
 Node* newNode(char op) {
     Node* node = (Node*)malloc(sizeof(Node));
     node->data = op;
