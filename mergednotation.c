@@ -41,7 +41,7 @@ void printGuide(); //Prints detailed guide with explanations and examples
 int main(int argc, char *argv[]) {
     if(argc == 1){
         printHelp();
-    } else if(argc == 2 ){ //if argument is one
+    } else if(argc == 2){ //if argument is one
         // Validate argument for help or guide
         if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
             // Handle help flag
