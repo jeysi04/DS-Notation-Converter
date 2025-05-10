@@ -81,16 +81,32 @@ To run the Notation Converter CLI, ensure your system meets the following prereq
 
 ### Compilation
 
+To compile the program, ensure you have a C compiler installed. The most commonly used compiler is `gcc` (GNU Compiler Collection), which is available on all major platforms.
+* For **Windows**, use the following command:
+  ```sh
+     gcc notation-converter.c -o notation-converter.exe
+  ```
+    > * `gcc`: The GNU Compiler Collection, commonly used for compiling C programs.
+    > * `notation-converter.c`: The main C source file of the program.
+    > * `-o notation-converter.exe`: Specifies the name of the output executable file.
+* For **Linux** or **macOS**, use the same command, adjusting the output file name if desired:
+  ```sh
+     gcc notation-converter.c -o notation-converter
+  ```
+    > * Unlike Windows, the `.exe` extension is not required on Unix-based systems.
+
 ### Usage
 
-The program is executed from the command line using a specific format.
+After compilation, the program is executed from the command line using a specific format.
 1. To convert an expression:
-```sh
-   notation-converter --from <input_format> --to <output_format> "<expression>"
-```
-> * `--from <input_format>`: Specifies the format of the input expression.
-> * `--to <output_format>`: Specifies the desired output format.
-> * `"<expression>"`: The expression to be converted. It must be enclosed in double quotes.
+   ```sh
+      notation-converter --from <input_format> --to <output_format> "<expression>"
+   ```
+   > * `notation-converter`: The command used to run the program in the terminal.
+   >   + The exact format depends on your operating system: use `notation-converter.exe` on Windows, and `./notation-converter` on Linux or macOS.
+   > * `--from <input_format>`: Specifies the format of the input expression.
+   > * `--to <output_format>`: Specifies the desired output format.
+   > * `"<expression>"`: The expression to be converted. It must be enclosed in double quotes.
 2. To display the `help` option with a brief usage summary:
    * Either:
      ```sh
@@ -107,19 +123,47 @@ The program is executed from the command line using a specific format.
 
 ### Examples
 
+Here are some sample usages of the program:
+1. Convert an prefix expression to infix:
+   ```sh
+      notation-converter --from prefix --to infix "* + 1 2 3"
+   ```
+   Output:
+   ```css
+      ( ( 1 + 2 ) * 3 )
+   ```
+2. Convert an infix expression to postfix:
+   ```sh
+      notation-converter --from infix --to postfix "( 1 + 2 ) * 3"
+   ```
+   Output:
+   ```css
+      1 2 + 3 *
+   ```
+3. Convert a postfix expression to prefix:
+   ```sh
+      notation-converter --from postfix --to prefix "1 2 3 * +"
+   ```
+   Output:
+   ```css
+      + 1 * 2 3
+   ```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- AUTHORS -->
 ## Authors
 
 This program was developed by the following students of BS Computer Science at Bicol Univeristy - College of Science:
-
-- A Z Rain L. Espinas 
+- A Z Rain L. Espinas
 - Jaycee D. Cadag
 - John Melrick M. Loviña
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- REFERENCES -->
 ## References
+
+Rosen, Kenneth H. *Discrete Mathematics and Its Applications* (8th ed.). McGraw-Hill Education, 2019. ISBN: 9781259676512.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
