@@ -71,7 +71,10 @@ The **Notation Converter CLI** is a command-line utility written in C that allow
 To run the Notation Converter CLI, ensure your system meets the following prerequisites and has the necessary tools installed.
 
 ### Prerequisites
-
+* **Operating System**: 
+  + Windows 
+  + macOS 
+  + Linux
 ### Installation
    
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
