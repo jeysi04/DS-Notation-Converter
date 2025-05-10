@@ -76,36 +76,29 @@ To run the Notation Converter CLI, ensure your system meets the following prereq
     - Windows 
     - macOS  
     - Linux
-      
+* **Terminal/Command Line Interface**:
+  + Required for compiling and executing the program. 
 * **C Compiler**:
   + This project is written in the C programming language and must be compiled before use. The most common and recommended compiler is GCC (GNU Compiler Collection).
-
   + To check if GCC is installed, run the following command in your terminal or command prompt:
     ```sh
     gcc --version
     ```
-
   + If GCC is not installed, follow the instructions below based on your operating system:
 
 
 **Operating System:**
 
 1. **Windows** (via MinGW):
-
       + Download **MinGW - Minimalist GNU for Windows** from [https://osdn.net/projects/mingw/releases/.](https://sourceforge.net/projects/mingw/)
-
       + Run the installer and select the package: mingw32-gcc-g++ under **Basic Setup**.
-
       + Click Installation and apply changes in the menu to complete installation.
-
       + After installation, verify GCC:
         ```sh
         gcc --version
         ```
-
 2. **macOS** (via Homebrew):
       + Install **Homebrew** (if not already installed), then open terminal and run:
-
         ```sh
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         ```
@@ -117,7 +110,6 @@ To run the Notation Converter CLI, ensure your system meets the following prereq
         ```sh
         gcc --version
         ```
-
 3. **Linux** (via Ubuntu):
       + Update the package list by opening the terminal and running
         ```sh
@@ -131,13 +123,13 @@ To run the Notation Converter CLI, ensure your system meets the following prereq
            - `gcc` (C compiler)  
            - `g++` (C++ compiler)  
            - `make` and other development tools  
-
       + After installation, verify GCC:
         ```sh
         gcc --version
         ```
 
 ### Installation
+Once your system meets the prerequisites, follow these steps to install and set up the Notation Converter CLI.
    
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
