@@ -20,13 +20,16 @@ Node* pop(Stack** top); //pops a tree node in the stack
 int isOperand(char ch); //checks if the character is an operand
 int isOperator(char ch); //checks if the character is an operator
 int isASpace(char ch); //checks if the character is a space
+int isPostfix(const char* postfix); //function to determine whether the expression is valid postfix
 Node* postfix_to_tree(char* postfix); //function to put the postfix expression in a binary tree
 void skipSpaces(char* expr, int* index); //function to skip spaces
+int isPrefix(const char* prefix); //function to determine whether the expression is valid prefix
 Node* prefix_to_tree(char* prefix, int* index);//function to put the prefix expression in a binary tree
 void preorder_Traversal(Node* root); //function to traverse in preorder
 void inorder_Traversal(Node* root); //function to traverse in inorder
 void postorder_Traversal(Node* root); //function to traverse in postorder
 int precedence(char op); // Determine operator precedence
+int isInfix(const char* infix); //function to determine whether it is a valid infix
 void infix_to_postfix(const char* infix, char* postfix); // Convert infix to postfix expression
 void reverse(char* str); // Reverse a string (used for infix to prefix conversion logic)
 void infix_to_prefix(const char* infix, char* prefix); // Convert infix to prefix using operator and operand stacks
@@ -36,8 +39,9 @@ void printGuide(); //Prints detailed guide with explanations and examples
 
 
 int main(int argc, char *argv[]) {
-
-    if(argc == 2){ //if argument is one
+    if(argc == 1){
+        printHelp();
+    } else if(argc == 2 ){ //if argument is one
         // Validate argument for help or guide
         if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
             // Handle help flag
@@ -54,70 +58,50 @@ int main(int argc, char *argv[]) {
     } //if arguments are more than one
     else {
         // Error Handling
-        // Validate correct number of arguments
-        if (argc < 6) {
-            printf("Error: Missing or incomplete arguments.\n");
-            printf("Correct Syntax: notation-converter --from <format> --to <format> \"<expression>\"\n");
+        // Validate '--from' and '--to' Arguments
+        if (strcmp(argv[1], "--from") != 0) {
+            printf("Error: Missing '--from' argument.\n");
             return 1;
-        } // Validate '--from' and '--to' Arguments
-        else if (strcmp(argv[1], "--from") != 0 || strcmp(argv[3], "--to") != 0) {
-            printf("Error: Missing or invalid '--from' or '--to' argument.\n");
+        } else if(strcmp(argv[3], "--to") != 0 || argc < 6){
+            printf("Error: Missing '--to' argument.\n");
             return 1;
-        } // Validate Format Specifiers
+        }// Validate Format Specifiers
+        else if(strcmp(argv[2], "infix") != 0 && strcmp(argv[2], "prefix") != 0 && strcmp(argv[2], "postfix") != 0 && 
+                strcmp(argv[4], "infix") != 0 && strcmp(argv[4], "prefix") != 0 && strcmp(argv[4], "postfix") != 0){
+            printf("Error: Invalid format specifier '%s' or '%s'.\n", argv[2], argv[4]);
+            return 1;
+        }
         else if (strcmp(argv[2], "infix") != 0 && strcmp(argv[2], "prefix") != 0 && strcmp(argv[2], "postfix") != 0) {
-            printf("Error: Invalid format specifier '%s'. Supported formats are 'infix', 'prefix', and 'postfix'.\n", argv[2]);
+            printf("Error: Invalid format specifier '%s.\n", argv[2]);
             return 1;
         }
         else if (strcmp(argv[4], "infix") != 0 && strcmp(argv[4], "prefix") != 0 && strcmp(argv[4], "postfix") != 0) {
-            printf("Error: Invalid format specifier '%s'. Supported formats are 'infix', 'prefix', and 'postfix'.\n", argv[4]);
+            printf("Error: Invalid format specifier '%s'.\n", argv[4]);
             return 1;
         }
         else if (strcmp(argv[1], "--from") == 0) {
             if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "postfix") == 0)) { //Infix to postfix
-                printf("%s\n", argv[5]);
-
                 char postfix[100];
                 infix_to_postfix(argv[5], postfix);
-
-                printf("Postfix expression: %s\n", postfix);
-
+                printf(postfix);
             } else if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "prefix") == 0)) { //Infix to prefix
-                printf("Infix expression: %s\n", argv[5]);
-
                 char prefix[100];
                 infix_to_prefix(argv[5], prefix);
-
-                printf("Prefix expression: %s\n", prefix);
+                printf(prefix);
             } else if ((strcmp(argv[2], "prefix") == 0) && (strcmp(argv[4], "infix") == 0)) { //prefix to infix
                 int index = 0;
-                printf("%s\n", argv[5]);
                 Node* root = prefix_to_tree(argv[5], &index);
-
-                printf("Infix expression: ");
                 inorder_Traversal(root);
-                printf("\n");
             } else if ((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "infix") == 0)) { //postfix to infix
-                printf("%s\n", argv[5]);
                 Node* root = postfix_to_tree(argv[5]);
-
-                printf("Infix expression: ");
                 inorder_Traversal(root);
-                printf("\n");
             } else if ((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "prefix") == 0)) { //postfix to prefix
-                printf("%s\n", argv[5]);
                 Node* root = postfix_to_tree(argv[5]);
-
-                printf("Prefix expression: ");
                 preorder_Traversal(root);
-                printf("\n");
             } else if ((strcmp(argv[2], "prefix") == 0) && (strcmp(argv[4], "postfix") == 0)) { //prefix to postfix
                 int index = 0;
-                printf("%s\n", argv[5]);
                 Node* root = prefix_to_tree(argv[5], &index);
-
-                printf("Postfix expression: ");
                 postorder_Traversal(root);
-                printf("\n");
             }
         }
     }
@@ -170,32 +154,69 @@ int isASpace(char ch) {
     return (ch == ' ');
 }
 
-//function to put the postfix expression in a binary tree
-Node* postfix_to_tree(char* postfix){
-    Stack* stack = NULL; //initializes empty stack
+//function to determine whether the expression is valid postfix
+int isPostfix(const char* postfix) {
+    int operandCount = 0; 
+    int operatorCount = 0;
 
-    //for loop that loop each character in the string until null terminator is found
-    for(int i=0; postfix[i] != '\0'; i++){
-        char token = postfix[i]; //each character is stored in token variable
+    for(int i = 0; postfix[i] != '\0'; i++) {
+        char token = postfix[i];
+        if (isASpace(token)) continue; //proceed to next character if space
 
-        if(isASpace(token)){ //if space, proceed to next character
-            continue;
-        }
-
-        if(isOperand(token)){ // if char is operand, push to stack
-            push(&stack, newNode(token));
-        }
-        if(isOperator(token)){ //if char is operator, pop two nodes
-            Node* right = pop(&stack);
-            Node* left = pop(&stack);
-            Node* opNode = newNode(token); //create two children
-            opNode->left = left;
-            opNode->right = right;
-            push(&stack, opNode); //push the newnode with two children back into the stack
+        if (isOperand(token)) {
+            operandCount++; // Each operand adds one
+        } else if (isOperator(token)) {
+            if (operandCount < 2) return 2; // Not enough operands
+            operatorCount++;
+            operandCount--; // An operator needs two operands, leave one operand
+        } else {
+            return 0; // Invalid character
         }
     }
-    return pop(&stack);
 
+    if(operatorCount == operandCount) //if equal
+        return 1; //the expression is valid
+    else if(operatorCount > operandCount)
+        return 2; //if operator is greater, insufficient operand
+    else if(operatorCount < operandCount)
+        return 3; //if operator is greater, insufficient operator
+}
+
+//function to put the postfix expression in a binary tree
+Node* postfix_to_tree(char* postfix){
+    int validpostfix = isPostfix(postfix);
+
+    if(validpostfix == 1){
+        Stack* stack = NULL; //initializes empty stack
+
+        //for loop that loop each character in the string until null terminator is found
+        for(int i=0; postfix[i] != '\0'; i++){
+            char token = postfix[i]; //each character is stored in token variable
+    
+            if(isASpace(token)){ //if space, proceed to next character
+                continue;
+            }
+    
+            if(isOperand(token)){ // if char is operand, push to stack
+                push(&stack, newNode(token));
+            }
+            if(isOperator(token)){ //if char is operator, pop two nodes
+                Node* right = pop(&stack);
+                Node* left = pop(&stack);
+                Node* opNode = newNode(token); //create two children
+                opNode->left = left;
+                opNode->right = right;
+                push(&stack, opNode); //push the newnode with two children back into the stack
+            }
+        }
+        return pop(&stack);
+    }
+    else if(validpostfix == 2){
+        printf("Malformed expression  (e.g., insufficient operand).\n");
+    }
+    else if(validpostfix == 3){
+        printf("Malformed expression  (e.g., insufficient operator).\n");
+    }
 }
 
 //function to skip spaces
@@ -203,22 +224,71 @@ void skipSpaces(char* expr, int* index) {
     while (expr[*index] == ' ') (*index)++;
 }
 
+//function to determine whether the expression is valid prefix
+int isPrefix(const char* prefix) {
+    int operandCount = 0;
+    int operatorCount = 0;
+
+    // Find length
+    int len = 0;
+    while (prefix[len] != '\0') len++;
+
+    // Scan right to left
+    for (int i = len - 1; i >= 0; i--) {
+        char token = prefix[i];
+        if (isASpace(token)) continue; //if space, proceed to next character
+
+        if (isOperand(token)) {
+            operandCount++; // Add operand count
+        } else if (isOperator(token)) {
+            if (operandCount < 2) return 2; // Not enough operands
+            operatorCount++;
+            operandCount--; // One operator reduces the count
+        } else {
+            return 0; // Invalid character
+        }
+    }
+
+    if(operatorCount == operandCount) //if equal
+        return 1; //the expression is valid
+    else if(operatorCount > operandCount)
+        return 2; //if operator is greater, insufficient operand
+    else if(operatorCount < operandCount)
+        return 3; //if operator is greater, insufficient operator
+}
+
 //function to put the prefix expression in a binary tree
 Node* prefix_to_tree(char* prefix, int* index) {
-    skipSpaces(prefix, index); //skip spaces
-    char token = prefix[*index]; //read the current character
+    int validprefix = isPrefix(prefix);
 
-    if (token == '\0') return NULL; //if token is null terminator return NULL
-
-    Node* node = newNode(token); //create a newnode with token
-    (*index)++;  // increment index
-    skipSpaces(prefix, index);
-
-    if (isOperator(token)) {//if token is an operator
-        node->left = prefix_to_tree(prefix, index); //recursively build left subtree
-        node->right = prefix_to_tree(prefix, index); //recursively build right subtree
+    if(validprefix == 1){
+        skipSpaces(prefix, index); //skip spaces
+        char token = prefix[*index]; //read the current character
+    
+        if (token == '\0') return NULL; //if token is null terminator return NULL
+    
+        Node* node = newNode(token); //create a newnode with token
+        (*index)++;  // increment index
+        skipSpaces(prefix, index);
+    
+        if (isOperator(token)) {//if token is an operator
+            node->left = prefix_to_tree(prefix, index); //recursively build left subtree
+            node->right = prefix_to_tree(prefix, index); //recursively build right subtree
+    
+            if (!node->left || !node->right) { //checks if left or right node is NULL
+                printf("Error: Malformed expression.\n");
+                return NULL;
+            }
+        }
+    
+        return node; //return node
     }
-    return node; //return node
+    else if(validprefix == 2){
+        printf("Malformed expression  (e.g., insufficient operand).\n");
+    }
+    else if(validprefix == 3){
+        printf("Malformed expression  (e.g., insufficient operator).\n");
+    }
 }
 
 //function to traverse in preorder
@@ -251,7 +321,6 @@ void inorder_Traversal(Node* root) {
 //function to traverse in postorder
 void postorder_Traversal(Node* root) {
     if (root == NULL) return;
-
     postorder_Traversal(root->left); //visit left
     postorder_Traversal(root->right); //visit right
     printf("%c ", root->data);
@@ -264,36 +333,81 @@ int precedence(char op) {
     return 0;
 }
 
-// Convert infix to postfix expression
-void infix_to_postfix(const char* infix, char* postfix) {
-    Stack* opStack = NULL;
-    int j = 0;
+//function to determine whether it is a valid infix
+int isInfix(const char* infix) {
+    int balance = 0;               // For tracking parentheses
+    int expectOperand = 1;         // Start expecting an operand 
+    int needOperator = 0;
 
-    for (int i = 0; infix[i]; i++) {
+    for (int i = 0; infix[i] != '\0'; i++) {
         char token = infix[i];
+        if (isASpace(token)) continue; //if is space, continue to next character
 
-        if (isASpace(token)) continue;
-
-        if (isOperand(token)) {
-            postfix[j++] = token;
-            postfix[j++] = ' ';
+        if (token == '(') {
+            balance++; 
+        } else if (token == ')') {
+            balance--;
+            if (balance < 0) return 0; // Too many closing parentheses (without a matching opening parentheses)
+        } else if (isOperand(token)) {
+            if (!expectOperand) needOperator = 1; // Two operands in a row (expectOperand = 0)
+            expectOperand = 0; // Next, expect an operator
         } else if (isOperator(token)) {
-            while (opStack && isOperator(opStack->treeNode->data) &&
-                   precedence(opStack->treeNode->data) >= precedence(token)) {
-                postfix[j++] = pop(&opStack)->data;
-                postfix[j++] = ' ';
-            }
-            push(&opStack, newNode(token));
+            if (expectOperand) return 2; // Operator without operand (expectOperand = 1)
+            expectOperand = 1; // Next, expect an operand
+        } else {
+            return 0; // Invalid character
         }
     }
 
-    while (opStack) {
-        postfix[j++] = pop(&opStack)->data;
-        postfix[j++] = ' ';
-    }
+    if(balance == 0 && expectOperand == 0 && needOperator == 0)
+        return 1; //if balanced and ends with operand
+    else if(expectOperand == 1)
+        return 2; //insufficient operand
+    else if(needOperator == 1)
+        return 3; //insufficient operator
+}
 
-    if (j > 0 && postfix[j - 1] == ' ') j--;
-    postfix[j] = '\0';
+// Convert infix to postfix expression
+void infix_to_postfix(const char* infix, char* postfix) {
+    int validinfix = isInfix(infix);
+
+    if(validinfix == 1){ //if a valid infix
+        Stack* opStack = NULL;
+        int j = 0;
+
+        for (int i = 0; infix[i]; i++) {
+            char token = infix[i];
+
+            if (isASpace(token)) continue;
+
+            if (isOperand(token)) {
+                postfix[j++] = token;
+                postfix[j++] = ' ';
+            } else if (isOperator(token)) {
+                while (opStack && isOperator(opStack->treeNode->data) &&
+                    precedence(opStack->treeNode->data) >= precedence(token)) {
+                    postfix[j++] = pop(&opStack)->data;
+                    postfix[j++] = ' ';
+                }
+                push(&opStack, newNode(token));
+            }
+        }
+
+        while (opStack) {
+            postfix[j++] = pop(&opStack)->data;
+            postfix[j++] = ' ';
+        }
+
+        if (j > 0 && postfix[j - 1] == ' ') j--;
+        postfix[j] = '\0';
+    } 
+    else if(validinfix == 2){
+        printf("Malformed expression  (e.g., insufficient operand).\n");
+    }
+    else if(validinfix == 3){
+        printf("Malformed expression  (e.g., insufficient operator).\n");
+    }
+    
 }
 
 // Reverse a string (used for infix to prefix conversion logic)
@@ -308,60 +422,65 @@ void reverse(char* str) {
 
 // Convert infix to prefix using operator and operand stacks
 void infix_to_prefix(const char* infix, char* prefix) {
-    char* operators[100];
-    char* operands[100];
-    int opTop = -1, valTop = -1;
-    int len = strlen(infix);
-    char token;
 
-    for (int i = 0; i < len; i++) {
-        token = infix[i];
-
-        if (isASpace(token)) continue;
-
-        if (isOperand(token)) {
-            char* operand = (char*)malloc(2);
-            operand[0] = token;
-            operand[1] = '\0';
-            operands[++valTop] = operand;
-        } else if (isOperator(token)) {
-            while (opTop != -1 && precedence(operators[opTop][0]) >= precedence(token)) {
-                char* op = operators[opTop--];
-                char* op1 = operands[valTop--];
-                char* op2 = operands[valTop--];
-
-                char* expr = (char*)malloc(strlen(op1) + strlen(op2) + 3);
-                sprintf(expr, "%c%s%s", op[0], op2, op1);
-
-                operands[++valTop] = expr;
-                free(op);
-                free(op1);
-                free(op2);
+    if(isInfix(infix)){
+        char* operators[100];
+        char* operands[100];
+        int opTop = -1, valTop = -1;
+        int len = strlen(infix);
+        char token;
+    
+        for (int i = 0; i < len; i++) {
+            token = infix[i];
+    
+            if (isASpace(token)) continue;
+    
+            if (isOperand(token)) {
+                char* operand = (char*)malloc(2);
+                operand[0] = token;
+                operand[1] = '\0';
+                operands[++valTop] = operand;
+            } else if (isOperator(token)) {
+                while (opTop != -1 && precedence(operators[opTop][0]) >= precedence(token)) {
+                    char* op = operators[opTop--];
+                    char* op1 = operands[valTop--];
+                    char* op2 = operands[valTop--];
+    
+                    char* expr = (char*)malloc(strlen(op1) + strlen(op2) + 3);
+                    sprintf(expr, "%c%s%s", op[0], op2, op1);
+    
+                    operands[++valTop] = expr;
+                    free(op);
+                    free(op1);
+                    free(op2);
+                }
+    
+                char* op = (char*)malloc(2);
+                op[0] = token;
+                op[1] = '\0';
+                operators[++opTop] = op;
             }
-
-            char* op = (char*)malloc(2);
-            op[0] = token;
-            op[1] = '\0';
-            operators[++opTop] = op;
         }
+    
+        while (opTop != -1) {
+            char* op = operators[opTop--];
+            char* op1 = operands[valTop--];
+            char* op2 = operands[valTop--];
+    
+            char* expr = (char*)malloc(strlen(op1) + strlen(op2) + 3);
+            sprintf(expr, "%c%s%s", op[0], op2, op1);
+    
+            operands[++valTop] = expr;
+            free(op);
+            free(op1);
+            free(op2);
+        }
+    
+        strcpy(prefix, operands[valTop]);
+        free(operands[valTop]);
+    } else {
+        printf("Malformed expression.\n");
     }
-
-    while (opTop != -1) {
-        char* op = operators[opTop--];
-        char* op1 = operands[valTop--];
-        char* op2 = operands[valTop--];
-
-        char* expr = (char*)malloc(strlen(op1) + strlen(op2) + 3);
-        sprintf(expr, "%c%s%s", op[0], op2, op1);
-
-        operands[++valTop] = expr;
-        free(op);
-        free(op1);
-        free(op2);
-    }
-
-    strcpy(prefix, operands[valTop]);
-    free(operands[valTop]);
 }
 
 /*
