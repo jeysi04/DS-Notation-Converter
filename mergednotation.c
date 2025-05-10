@@ -56,13 +56,16 @@ int main(int argc, char *argv[]) {
             return 1;
         } 
     } //if arguments are more than one
+    else if(argc > 6) {
+        printf("Error: Multiple expressions provided. Mathematical expressions containing spaces must be enclosed in quotation marks.\n");
+    }
     else {
         // Error Handling
         // Validate '--from' and '--to' Arguments
         if (strcmp(argv[1], "--from") != 0) {
             printf("Error: Missing '--from' argument.\n");
             return 1;
-        } else if(strcmp(argv[3], "--to") != 0 || argc < 6){
+        } else if(strcmp(argv[3], "--to") != 0){
             printf("Error: Missing '--to' argument.\n");
             return 1;
         }// Validate Format Specifiers
@@ -79,6 +82,8 @@ int main(int argc, char *argv[]) {
             printf("Error: Invalid format specifier '%s'.\n", argv[4]);
             return 1;
         }
+        else if(argc == 5)
+            printf("Error: Missing expression.");
         else if (strcmp(argv[1], "--from") == 0) {
             if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "postfix") == 0)) { //Infix to postfix
                 char postfix[100];
@@ -154,6 +159,7 @@ int isASpace(char ch) {
     return (ch == ' ');
 }
 
+
 //function to determine whether the expression is valid postfix
 int isPostfix(const char* postfix) {
     int operandCount = 0; 
@@ -177,13 +183,23 @@ int isPostfix(const char* postfix) {
     if(operatorCount == operandCount) //if equal
         return 1; //the expression is valid
     else if(operatorCount > operandCount)
-        return 2; //if operator is greater, insufficient operand
+                return 2; //if operator is greater, insufficient operand
     else if(operatorCount < operandCount)
-        return 3; //if operator is greater, insufficient operator
+                return 3; //if operator is greater, insufficient operator
 }
 
 //function to put the postfix expression in a binary tree
 Node* postfix_to_tree(char* postfix){
+    //checks whether the given expression is infix or prefix; if they are skip the process
+    if(isInfix(postfix)){
+        printf("Error: Malformed Expression (This is an infix expression.).");
+        return NULL;
+    }
+    else if(isPrefix(postfix)){
+        printf("Error: Malformed Expression (This is an prefix expression.).");
+        return NULL;
+    }
+
     int validpostfix = isPostfix(postfix);
 
     if(validpostfix == 1){
@@ -212,10 +228,10 @@ Node* postfix_to_tree(char* postfix){
         return pop(&stack);
     }
     else if(validpostfix == 2){
-        printf("Malformed expression  (e.g., insufficient operand).\n");
+        printf("Error: Malformed expression  (e.g., insufficient operand).\n");
     }
     else if(validpostfix == 3){
-        printf("Malformed expression  (e.g., insufficient operator).\n");
+        printf("Error: Malformed expression  (e.g., insufficient operator).\n");
     }
 }
 
@@ -259,6 +275,16 @@ int isPrefix(const char* prefix) {
 
 //function to put the prefix expression in a binary tree
 Node* prefix_to_tree(char* prefix, int* index) {
+    //checks whether the given expression is infix or postfix; if they are skip the process
+    if(isInfix(prefix) == 1){
+        printf("Error: Malformed Expression (This is an infix expression.).");
+        return NULL;
+    }
+    else if(isPostfix(prefix) == 1){
+        printf("Error: Malformed Expression (This is an postfix expression.).");
+        return NULL;
+    }
+
     int validprefix = isPrefix(prefix);
 
     if(validprefix == 1){
@@ -284,10 +310,10 @@ Node* prefix_to_tree(char* prefix, int* index) {
         return node; //return node
     }
     else if(validprefix == 2){
-        printf("Malformed expression  (e.g., insufficient operand).\n");
+        printf("Error: Malformed expression  (e.g., insufficient operand).\n");
     }
     else if(validprefix == 3){
-        printf("Malformed expression  (e.g., insufficient operator).\n");
+        printf("Error: Malformed expression  (e.g., insufficient operator).\n");
     }
 }
 
@@ -369,6 +395,14 @@ int isInfix(const char* infix) {
 
 // Convert infix to postfix expression
 void infix_to_postfix(const char* infix, char* postfix) {
+        //checks whether the given expression is postfix or prefix; if they are skip the process
+        if(isPostfix(infix) == 1){
+            printf("Error: Malformed Expression (This is an postfix expression.).");
+        }
+        else if(isPrefix(infix) == 1){
+            printf("Error: Malformed Expression (This is an prefix expression.).");
+        }
+
     int validinfix = isInfix(infix);
 
     if(validinfix == 1){ //if a valid infix
@@ -402,10 +436,10 @@ void infix_to_postfix(const char* infix, char* postfix) {
         postfix[j] = '\0';
     } 
     else if(validinfix == 2){
-        printf("Malformed expression  (e.g., insufficient operand).\n");
+        printf("Error: Malformed expression  (e.g., insufficient operand).\n");
     }
     else if(validinfix == 3){
-        printf("Malformed expression  (e.g., insufficient operator).\n");
+        printf("Error: Malformed expression  (e.g., insufficient operator).\n");
     }
     
 }
@@ -422,6 +456,14 @@ void reverse(char* str) {
 
 // Convert infix to prefix using operator and operand stacks
 void infix_to_prefix(const char* infix, char* prefix) {
+    //checks whether the given expression is postfix or prefix; if they are skip the process
+    if(isPostfix(infix) == 1){
+        printf("Error: Malformed Expression (This is an postfix expression.).");
+    }
+    else if(isPrefix(infix) == 1){
+        printf("Error: Malformed Expression (This is an prefix expression.).");
+    }
+    
     int validinfix = isInfix(infix);
 
     if(validinfix == 1){
@@ -481,10 +523,10 @@ void infix_to_prefix(const char* infix, char* prefix) {
         free(operands[valTop]);
     } 
     else if(validinfix == 2){
-        printf("Malformed expression  (e.g., insufficient operand).\n");
+        printf("Error: Malformed expression  (e.g., insufficient operand).\n");
     }
     else if(validinfix == 3){
-        printf("Malformed expression  (e.g., insufficient operator).\n");
+        printf("Error: Malformed expression  (e.g., insufficient operator).\n");
     }
 }
 
