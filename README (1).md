@@ -130,7 +130,28 @@ To run the Notation Converter CLI, ensure your system meets the following prereq
 
 ### Installation
 Once your system meets the prerequisites, follow these steps to install and set up the Notation Converter CLI.
-   
+1. Download the Source Code
+   + If you have Git installed, you can clone the repository using:
+     ```sh
+      git clone https://github.com/github_username/repo_name.git
+      cd repo_name
+     ```
+   + Alternatively, you can also download the ZIP archive of the project from the GitHub repository, extract it, and open the folder in your terminal or command prompt.
+2. Compile the Program
+   + Open your terminal in the project directory and run the appropriate gcc command based on your operating system:
+     - Windows:
+       ```sh
+        gcc notation-converter.c -o notation-converter.exe
+       ```
+     - Linux/macOS:
+       ```sh
+        gcc notation-converter.c -o notation-converter
+       ```    
+ 3. Verify the Setup
+    + Test if the program runs correctly:
+      ```sh
+      notation-converter.exe --help
+      ```    
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- PROGRAM EXECUTION -->
