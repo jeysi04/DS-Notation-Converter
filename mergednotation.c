@@ -41,7 +41,7 @@ void printGuide(); //Prints detailed guide with explanations and examples
 int main(int argc, char *argv[]) {
     if(argc == 1){
         printHelp();
-    } else if(argc == 2){ //if argument is one
+    } else if(argc <= 3){ //if argument is one
         // Validate argument for help or guide
         if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
             // Handle help flag
@@ -51,8 +51,8 @@ int main(int argc, char *argv[]) {
             // Handle guide flag
             printGuide();
             return 0;
-        } else if(strcmp(argv[1], "-h") != 0 || strcmp(argv[1], "--help") != 0 || strcmp(argv[1], "--guide") != 0){
-            printf("Error: Missing or invalid argument. Supported formats are '--help', '-h' and '--guide'.\n");
+        } else if(strcmp(argv[1], "-h") != 0 || strcmp(argv[1], "--help") != 0 || strcmp(argv[1], "--guide") != 0 || argc <= 3){
+            printf("Error: Missing or invalid argument.\n");
             return 1;
         } 
     } //if arguments are more than one
@@ -422,8 +422,9 @@ void reverse(char* str) {
 
 // Convert infix to prefix using operator and operand stacks
 void infix_to_prefix(const char* infix, char* prefix) {
+    int validinfix = isInfix(infix);
 
-    if(isInfix(infix)){
+    if(validinfix == 1){
         char* operators[100];
         char* operands[100];
         int opTop = -1, valTop = -1;
@@ -478,8 +479,12 @@ void infix_to_prefix(const char* infix, char* prefix) {
     
         strcpy(prefix, operands[valTop]);
         free(operands[valTop]);
-    } else {
-        printf("Malformed expression.\n");
+    } 
+    else if(validinfix == 2){
+        printf("Malformed expression  (e.g., insufficient operand).\n");
+    }
+    else if(validinfix == 3){
+        printf("Malformed expression  (e.g., insufficient operator).\n");
     }
 }
 
