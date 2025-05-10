@@ -78,7 +78,18 @@ To run the Notation Converter CLI, ensure your system meets the following prereq
     - Linux
       
 * **C Compiler**:
-  + This project is written in the C programming language and must be compiled before use.
+  + This project is written in the C programming language and must be compiled before use. The most common and recommended compiler is GCC (GNU Compiler Collection).
+
+  + To check if GCC is installed, run the following command in your terminal or command prompt:
+    ```sh
+    gcc --version
+    ```
+
+  + If GCC is not installed, follow the instructions below based on your operating system:    
+  
+    
+   
+
 ### Installation
    
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
