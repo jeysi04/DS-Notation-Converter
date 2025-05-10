@@ -87,16 +87,55 @@ To run the Notation Converter CLI, ensure your system meets the following prereq
 
   + If GCC is not installed, follow the instructions below based on your operating system:
 
-  **Operating System:**
 
-    * **Windows** (using MinGW):
-      1. Download MinGW from [https://osdn.net/projects/mingw/releases/.](https://sourceforge.net/projects/mingw/)
-    * **macOS**
-    * **Linux**
+**Operating System:**
 
-  
-    
-   
+1. **Windows** (via MinGW):
+
+      + Download **MinGW - Minimalist GNU for Windows** from [https://osdn.net/projects/mingw/releases/.](https://sourceforge.net/projects/mingw/)
+
+      + Run the installer and select the package: mingw32-gcc-g++ under **Basic Setup**.
+
+      + Click Installation and apply changes in the menu to complete installation.
+
+      + After installation, verify GCC:
+        ```sh
+        gcc --version
+        ```
+
+2. **macOS** (via Homebrew):
+      + Install **Homebrew** (if not already installed), then open terminal and run:
+
+        ```sh
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        ```
+      + Once Homebrew is installed, run:
+        ```sh
+        brew install gcc
+        ```
+      + After installation, verify GCC:
+        ```sh
+        gcc --version
+        ```
+
+3. **Linux** (via Ubuntu):
+      + Update the package list by opening the terminal and running
+        ```sh
+        sudo apt update
+        ```
+      + Install essential development tools including GCC and G++:
+        ```sh
+        sudo apt install build-essential
+        ```
+        This installs:
+           - `gcc` (C compiler)  
+           - `g++` (C++ compiler)  
+           - `make` and other development tools  
+
+      + After installation, verify GCC:
+        ```sh
+        gcc --version
+        ```
 
 ### Installation
    
