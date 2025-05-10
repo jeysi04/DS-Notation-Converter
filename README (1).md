@@ -85,7 +85,15 @@ To run the Notation Converter CLI, ensure your system meets the following prereq
     gcc --version
     ```
 
-  + If GCC is not installed, follow the instructions below based on your operating system:    
+  + If GCC is not installed, follow the instructions below based on your operating system:
+
+  **Operating System:**
+
+    * **Windows** (using MinGW):
+      1. Download MinGW from [https://osdn.net/projects/mingw/releases/.](https://sourceforge.net/projects/mingw/)
+    * **macOS**
+    * **Linux**
+
   
     
    
