@@ -71,9 +71,87 @@ The **Notation Converter CLI** is a command-line utility written in C that allow
 To run the Notation Converter CLI, ensure your system meets the following prerequisites and has the necessary tools installed.
 
 ### Prerequisites
+* **Operating System**:  
+  + The program has been tested on and is compatible with the following operating systems:  
+    - Windows 
+    - macOS  
+    - Linux
+* **Terminal/Command Line Interface**:
+  + Required for compiling and executing the program. 
+* **C Compiler**:
+  + This project is written in the C programming language and must be compiled before use. The most common and recommended compiler is GCC (GNU Compiler Collection).
+  + To check if GCC is installed, run the following command in your terminal or command prompt:
+    ```sh
+    gcc --version
+    ```
+  + If GCC is not installed, follow the instructions below based on your operating system:
+
+
+**Operating System:**
+
+1. **Windows** (via MinGW):
+      + Download **MinGW - Minimalist GNU for Windows** from [https://osdn.net/projects/mingw/releases/.](https://sourceforge.net/projects/mingw/)
+      + Run the installer and select the package: mingw32-gcc-g++ under **Basic Setup**.
+      + Click Installation and apply changes in the menu to complete installation.
+      + After installation, verify GCC:
+        ```sh
+        gcc --version
+        ```
+2. **macOS** (via Homebrew):
+      + Install **Homebrew** (if not already installed), then open terminal and run:
+        ```sh
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        ```
+      + Once Homebrew is installed, run:
+        ```sh
+        brew install gcc
+        ```
+      + After installation, verify GCC:
+        ```sh
+        gcc --version
+        ```
+3. **Linux** (via Ubuntu):
+      + Update the package list by opening the terminal and running
+        ```sh
+        sudo apt update
+        ```
+      + Install essential development tools including GCC and G++:
+        ```sh
+        sudo apt install build-essential
+        ```
+        This installs:
+           - `gcc` (C compiler)  
+           - `g++` (C++ compiler)  
+           - `make` and other development tools  
+      + After installation, verify GCC:
+        ```sh
+        gcc --version
+        ```
 
 ### Installation
-   
+Once your system meets the prerequisites, follow these steps to install and set up the Notation Converter CLI.
+1. Download the Source Code
+   + If you have Git installed, you can clone the repository using:
+     ```sh
+      git clone https://github.com/github_username/repo_name.git
+      cd repo_name
+     ```
+   + Alternatively, you can also download the ZIP archive of the project from the GitHub repository, extract it, and open the folder in your terminal or command prompt.
+2. Compile the Program
+   + Open your terminal in the project directory and run the appropriate gcc command based on your operating system:
+     - Windows:
+       ```sh
+        gcc notation-converter.c -o notation-converter.exe
+       ```
+     - Linux/macOS:
+       ```sh
+        gcc notation-converter.c -o notation-converter
+       ```    
+ 3. Verify the Setup
+    + Test if the program runs correctly:
+      ```sh
+      notation-converter.exe --help
+      ```    
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- PROGRAM EXECUTION -->
