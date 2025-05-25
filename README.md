@@ -1,6 +1,6 @@
 <!-- PROJECT TITLE -->
 <br />
-<h1 align="center">Notation Converter CLI</h1>
+<h1 align="center">Notation Converter</h1>
 
   <p align="center">
     A command-line utility in C to convert mathematical expressions between infix, prefix, and postfix notations using expression trees.
@@ -43,7 +43,7 @@
 ## Program Overview
 
 ### Introduction
-The **Notation Converter CLI** is a command-line utility written in C that allows users to convert mathematical expressions between ***infix***, ***prefix***, and ***postfix*** notations. It utilizes expression trees and their corresponding traversals (_in-order_, _pre-order_, and _post-order_) to parse the expression and systematically generate the equivalent forms in the desired notation. This program is useful for learning how expressions are represented and evaluated by computers, especially in the fields of data structures, compilers, and programming languages.
+The **Notation Converter** is a command-line utility written in C that allows users to convert mathematical expressions between ***infix***, ***prefix***, and ***postfix*** notations. It utilizes expression trees and their corresponding traversals (_in-order_, _pre-order_, and _post-order_) to parse the expression and systematically generate the equivalent forms in the desired notation. This program is useful for learning how expressions are represented and evaluated by computers, especially in the fields of data structures, compilers, and programming languages.
 
 ### Key Features
 * **Command-Line Interface (CLI)**
@@ -68,90 +68,76 @@ The **Notation Converter CLI** is a command-line utility written in C that allow
 <!-- SETUP GUIDE -->
 ## Setup Guide
 
-To run the Notation Converter CLI, ensure your system meets the following prerequisites and has the necessary tools installed.
+To run the Notation Converter, ensure your system meets the following prerequisites and has the necessary tools installed.
 
 ### Prerequisites
-* **Operating System**:  
+* **Operating System** 
   + The program has been tested on and is compatible with the following operating systems:  
     - Windows 
     - macOS  
     - Linux
-* **Terminal/Command Line Interface**:
+* **Command Line Interface (CLI) / Terminal**
   + Required for compiling and executing the program. 
-* **C Compiler**:
+* **C Compiler**
   + This project is written in the C programming language and must be compiled before use. The most common and recommended compiler is GCC (GNU Compiler Collection).
   + To check if GCC is installed, run the following command in your terminal or command prompt:
     ```sh
     gcc --version
     ```
-  + If GCC is not installed, follow the instructions below based on your operating system:
-
-
-**Operating System:**
-
-1. **Windows** (via MinGW):
-      + Download **MinGW - Minimalist GNU for Windows** from [https://osdn.net/projects/mingw/releases/.](https://sourceforge.net/projects/mingw/)
-      + Run the installer and select the package: mingw32-gcc-g++ under **Basic Setup**.
-      + Click Installation and apply changes in the menu to complete installation.
-      + After installation, verify GCC:
-        ```sh
-        gcc --version
-        ```
-2. **macOS** (via Homebrew):
-      + Install **Homebrew** (if not already installed), then open terminal and run:
-        ```sh
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        ```
-      + Once Homebrew is installed, run:
-        ```sh
-        brew install gcc
-        ```
-      + After installation, verify GCC:
-        ```sh
-        gcc --version
-        ```
-3. **Linux** (via Ubuntu):
-      + Update the package list by opening the terminal and running
-        ```sh
-        sudo apt update
-        ```
-      + Install essential development tools including GCC and G++:
-        ```sh
-        sudo apt install build-essential
-        ```
-        This installs:
-           - `gcc` (C compiler)  
-           - `g++` (C++ compiler)  
-           - `make` and other development tools  
-      + After installation, verify GCC:
-        ```sh
-        gcc --version
-        ```
 
 ### Installation
-Once your system meets the prerequisites, follow these steps to install and set up the Notation Converter CLI.
-1. Download the Source Code
+If GCC is not installed, follow the instructions below based on your operating system.
+* For **Windows** (via MinGW):
+  + Download **MinGW - Minimalist GNU for Windows** from [https://osdn.net/projects/mingw/releases/.](https://sourceforge.net/projects/mingw/)
+  + Run the installer and select the package: mingw32-gcc-g++ under **Basic Setup**.
+  + Click Installation and apply changes in the menu to complete installation.
+  + After installation, verify GCC:
+    ```sh
+       gcc --version
+    ```
+* For **macOS** (via Homebrew):
+  + Install **Homebrew** (if not already installed), then open terminal and run:
+    ```sh
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
+  + Once Homebrew is installed, run:
+    ```sh
+       brew install gcc
+    ```
+  + After installation, verify GCC:
+    ```sh
+       gcc --version
+    ```
+* For **Linux** (via Ubuntu):
+  + Update the package list by opening the terminal and running
+    ```sh
+       sudo apt update
+    ```
+  + Install essential development tools including GCC and G++:
+    ```sh
+       sudo apt install build-essential
+    ```
+    This installs:
+    - `gcc` (C compiler)  
+    - `g++` (C++ compiler)  
+    - `make` and other development tools  
+    + After installation, verify GCC:
+      ```sh
+         gcc --version
+      ```
+
+Once your system meets the prerequisites, set up the Notation Converter - save or download the source code.
+* Option 1: Clone the Repository
    + If you have Git installed, you can clone the repository using:
      ```sh
       git clone https://github.com/github_username/repo_name.git
       cd repo_name
      ```
-   + Alternatively, you can also download the ZIP archive of the project from the GitHub repository, extract it, and open the folder in your terminal or command prompt.
-2. Compile the Program
-   + Open your terminal in the project directory and run the appropriate gcc command based on your operating system:
-     - Windows:
-       ```sh
-        gcc notation-converter.c -o notation-converter.exe
-       ```
-     - Linux/macOS:
-       ```sh
-        gcc notation-converter.c -o notation-converter
-       ```    
- 3. Verify the Setup
-    + Test if the program runs correctly:
-      ```sh
-      notation-converter.exe --help
-      ```    
+* Option 2: Download as ZIP
+  1. Visit the GitHub repository in your browser.
+  2. Click the Code button and choose Download ZIP.
+  3. Extract the ZIP archive.
+  4. Open the extracted folder in your terminal or command prompt.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- PROGRAM EXECUTION -->
@@ -208,11 +194,11 @@ Here are some sample usages of the program:
    ```
    Output:
    ```css
-      ( ( 1 + 2 ) * 3 )
+      ((1 + 2) * 3)
    ```
 2. Convert an infix expression to postfix:
    ```sh
-      notation-converter --from infix --to postfix "( 1 + 2 ) * 3"
+      notation-converter --from infix --to postfix "(1 + 2) * 3"
    ```
    Output:
    ```css
