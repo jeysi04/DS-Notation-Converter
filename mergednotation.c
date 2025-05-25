@@ -156,7 +156,9 @@ int isPostfix(const char* postfix) {
     int operatorCount = 0;
     for (int i = 0; postfix[i] != '\0'; i++) {
         char token = postfix[i];
+
         if (isASpace(token)) continue; // Proceed to next character if space
+
         if (isOperand(token)) {
             operandCount++; // Each operand adds one
         } else if (isOperator(token)) {
@@ -167,13 +169,12 @@ int isPostfix(const char* postfix) {
             return 0; // Invalid character
         }
     }
-    if (operatorCount == operandCount)
+    if (operatorCount > operandCount)
         return 1; // The expression is valid
-    else if (operatorCount > operandCount)
+    else if (operatorCount + 1 > operandCount)
         return 2; // Insufficient operand
-    else if (operatorCount < operandCount)
+    else if (operatorCount + 1 < operandCount )
         return 3; // Insufficient operator
-    return 0;
 }
 
 //function to put the postfix expression in a binary tree
@@ -228,17 +229,20 @@ void skipSpaces(char* expr, int* index) {
     while (expr[*index] == ' ') (*index)++;
 }
 
-// Function to determine whether the expression is valid prefix
+//function to determine whether the expression is valid prefix
 int isPrefix(const char* prefix) {
     int operandCount = 0;
     int operatorCount = 0;
+
     // Find length
     int len = 0;
     while (prefix[len] != '\0') len++;
+
     // Scan right to left
     for (int i = len - 1; i >= 0; i--) {
         char token = prefix[i];
-        if (isASpace(token)) continue; // If space, proceed to next character
+        if (isASpace(token)) continue; //if space, proceed to next character
+
         if (isOperand(token)) {
             operandCount++; // Add operand count
         } else if (isOperator(token)) {
@@ -249,14 +253,15 @@ int isPrefix(const char* prefix) {
             return 0; // Invalid character
         }
     }
-    if (operatorCount == operandCount)
-        return 1; // The expression is valid
-    else if (operatorCount > operandCount)
-        return 2; // Insufficient operand
-    else if (operatorCount < operandCount)
-        return 3; // Insufficient operator
-    return 0;
+
+    if(operatorCount > operandCount) //if equal
+        return 1; //the expression is valid
+    else if(operatorCount + 1 > operandCount)
+        return 2; //if operator is greater, insufficient operand
+    else if(operatorCount + 1 < operandCount)
+        return 3; //if operator is greater, insufficient operator
 }
+
 
 // Function to put the prefix expression in a binary tree
 Node* prefix_to_tree(char* prefix, int* index) {
@@ -268,7 +273,9 @@ Node* prefix_to_tree(char* prefix, int* index) {
         printf("Error: Malformed Expression (This is a postfix expression).\n");
         return NULL;
     }
+
     int validprefix = isPrefix(prefix);
+    
     if (validprefix == 1) {
         skipSpaces(prefix, index); // Skip spaces
         char token = prefix[*index]; // Read the current character
