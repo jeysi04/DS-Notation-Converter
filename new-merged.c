@@ -274,7 +274,6 @@ int isInfix(const char* infix) {
 }
 
 // Function to convert from infix to postfix using the Shunting Yard Algorithm
-// Infix to postfix
 void infix_to_postfix(const char* infix, char* postfix) {
     // Check for malformed input before processing
     if (isPostfix(infix) == 1) {
