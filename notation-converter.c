@@ -150,7 +150,7 @@ int isASpace(char ch) {
     return (ch == ' ');
 }
 
-// Determines whether the expression is valid postfix
+// Function to determine whether the expression is valid postfix
 int isPostfix(const char* postfix) {
     int operandCount = 0; 
     int operatorCount = 0;
@@ -176,7 +176,7 @@ int isPostfix(const char* postfix) {
     return 0;
 }
 
-// Puts the postfix expression in a binary tree
+// function to put the postfix expression in a binary tree
 Node* postfix_to_tree(char* postfix) {
     // Checks whether the given expression is infix or prefix; if they are, skip the process
     if (isInfix(postfix)) {
@@ -225,12 +225,12 @@ Node* postfix_to_tree(char* postfix) {
     return NULL;
 }
 
-// Skips spaces in the expression
+// Function to skip spaces in the expression
 void skipSpaces(char* expr, int* index) {
     while (expr[*index] == ' ') (*index)++;
 }
 
-// Determines whether the expression is valid prefix
+// Function to determine whether the expression is valid prefix
 int isPrefix(const char* prefix) {
     int operandCount = 0;
     int operatorCount = 0;
@@ -260,7 +260,7 @@ int isPrefix(const char* prefix) {
     return 0;
 }
 
-// Puts the prefix expression in a binary tree
+// Function to put the prefix expression in a binary tree
 Node* prefix_to_tree(char* prefix, int* index) {
     // Checks whether the given expression is infix or postfix; if they are, skip the process
     if (isInfix(prefix) == 1) {
@@ -296,7 +296,7 @@ Node* prefix_to_tree(char* prefix, int* index) {
     return NULL;
 }
 
-// Traverses in preorder (root, left, right)
+// Function to traverse in preorder (root, left, right)
 void preorder_Traversal(Node* root) {
     if (root != NULL) { 
         printf("%c ", root->data); // Visit root
@@ -305,7 +305,7 @@ void preorder_Traversal(Node* root) {
     }
 }
 
-// Traverses in inorder (left, root, right)
+// Function to traverse in inorder (left, root, right)
 void inorder_Traversal(Node* root) {
     if (root == NULL)
         return;
@@ -322,7 +322,7 @@ void inorder_Traversal(Node* root) {
     }
 }
 
-// Traverses in postorder (left, right, root)
+// Function to traverse in postorder (left, right, root)
 void postorder_Traversal(Node* root) {
     if (root == NULL) return;
     postorder_Traversal(root->left); // Visit left
@@ -337,7 +337,7 @@ int precedence(char op) {
     return 0;
 }
 
-// Determines whether it is a valid infix expression
+// Function to determine whether it is a valid infix expression
 int isInfix(const char* infix) {
     int balance = 0; // For tracking parentheses
     int expectOperand = 1; // Start expecting an operand 
@@ -349,12 +349,12 @@ int isInfix(const char* infix) {
             balance++; 
         } else if (token == ')') {
             balance--;
-            if (balance < 0) return 0; // Too many closing parentheses
+            if (balance < 0) return 0; // Too many closing parentheses (without a matching opening parentheses)
         } else if (isOperand(token)) {
-            if (!expectOperand) needOperator = 1; // Two operands in a row
+            if (!expectOperand) needOperator = 1; // Two operands in a row (expectOperand = 0)
             expectOperand = 0; // Next, expect an operator
         } else if (isOperator(token)) {
-            if (expectOperand) return 2; // Operator without operand
+            if (expectOperand) return 2; // Operator without operand (expectOperand = 1)
             expectOperand = 1; // Next, expect an operand
         } else {
             return 0; // Invalid character
@@ -369,7 +369,8 @@ int isInfix(const char* infix) {
     return 0;
 }
 
-// Converts infix to postfix expression using the shunting yard algorithm
+// Infix to postfix 
+// Function to convert infix to postfix expression using the shunting yard algorithm
 void infix_to_postfix(const char* infix, char* postfix) {
     // Check for malformed input before processing
     if (isPostfix(infix) == 1) {
@@ -464,7 +465,8 @@ void infix_to_postfix(const char* infix, char* postfix) {
     postfix[j] = '\0'; // Null-terminate the postfix string
 }
 
-// Reverses a string and swaps parentheses for infix-to-prefix conversion
+// Infix to Prefix
+// Function to reverse a string and swaps parentheses for infix-to-prefix conversion
 void reverse(char* str) {
     // Get the length of the input string
     int len = strlen(str);
