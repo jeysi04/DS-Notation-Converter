@@ -169,7 +169,7 @@ int isPostfix(const char* postfix) {
             return 0; // Invalid character
         }
     }
-    if (operatorCount > operandCount)
+    if (operatorCount > operandCount || (operatorCount == 1 && operandCount == 1))
         return 1; // The expression is valid
     else if (operatorCount + 1 > operandCount)
         return 2; // Insufficient operand
@@ -254,7 +254,7 @@ int isPrefix(const char* prefix) {
         }
     }
 
-    if(operatorCount > operandCount) //if equal
+    if(operatorCount > operandCount || (operatorCount == 1 && operandCount == 1)) //if equal
         return 1; //the expression is valid
     else if(operatorCount + 1 > operandCount)
         return 2; //if operator is greater, insufficient operand
