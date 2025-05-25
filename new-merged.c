@@ -95,6 +95,35 @@ int main(int argc, char *argv[]) {
             printf("Error: Missing expression.\n");
             return 1;
         } else if (strcmp(argv[1], "--from") == 0) {
+            // Check for same input and output formats
+            if (strcmp(argv[2], argv[4]) == 0) {
+                if (strcmp(argv[2], "infix") == 0) {
+                    if (isInfix(argv[5]) == 0 || isInfix(argv[5]) == 2 || isInfix(argv[5]) == 3) {
+                        printf("Error: Expression is not a valid infix expression.\n");
+                        return 1;
+                    }
+                    printf("Note: The expression is already in infix form.\n");
+                    return 0;
+                }
+                if (strcmp(argv[2], "prefix") == 0) {
+                    if (isPrefix(argv[5]) == 0 || isPrefix(argv[5]) == 2 || isPrefix(argv[5]) == 3) {
+                        printf("Error: Expression is not a valid prefix expression.\n");
+                        return 1;
+                    }
+                    printf("Note: The expression is already in prefix form.\n");
+                    return 0;
+                }
+                if (strcmp(argv[2], "postfix") == 0) {
+                    if (isPostfix(argv[5]) == 0 || isPostfix(argv[5]) == 2 || isPostfix(argv[5]) == 3) {
+                        printf("Error: Expression is not a valid postfix expression.\n");
+                        return 1;
+                    }
+                    printf("Note: The expression is already in postfix form.\n");
+                    return 0;
+                }
+            }
+
+            // Perform conversions based on input and output formats
             if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "postfix") == 0)) { // Infix to postfix
                 char postfix[100] = {0};
                 infix_to_postfix(argv[5], postfix);
@@ -247,11 +276,7 @@ int isInfix(const char* infix) {
 // Function to convert from infix to postfix using the Shunting Yard Algorithm
 void infix_to_postfix(const char* infix, char* postfix) {
     // Check input format before processing
-    if (isInfix(infix) == 1) {
-        printf("Note: The expression is already in infix form.\n");
-        return;
-    }
-    else if (isPostfix(infix) == 1) {
+    if (isPostfix(infix) == 1) {
         printf("Error: Malformed expression. Detected postfix format.\n");
         printf("Hint: Expression must be in infix form.\n");
         return;
@@ -358,11 +383,7 @@ void infix_to_postfix(const char* infix, char* postfix) {
 // Function to convert from infix to prefix using the Shunting Yard Algorithm
 void infix_to_prefix(const char* infix, char* prefix) {
     // Check input format before processing
-    if (isInfix(infix) == 1) {
-        printf("Note: The expression is already in infix form.\n");
-        return;
-    }
-    else if (isPostfix(infix) == 1) {
+    if (isPostfix(infix) == 1) {
         printf("Error: Malformed expression. Detected postfix format.\n");
         printf("Hint: Expression must be in infix form.\n");
         return;
@@ -530,11 +551,7 @@ int isPrefix(const char* prefix) {
 // Function to put the prefix expression in a binary tree
 Node* prefix_to_tree(char* prefix, int* index) {
     // Check input format before processing
-    if (isPrefix(prefix) == 1) {
-        printf("Note: The expression is already in prefix form.\n");
-        return NULL;
-    }
-    else if (isInfix(prefix) == 1) {
+    if (isInfix(prefix) == 1) {
         printf("Error: Malformed expression. Detected infix format.\n");
         printf("Hint: Expression must be in prefix form.\n");
         return NULL;
@@ -605,11 +622,7 @@ int isPostfix(const char* postfix) {
 // Function to put the postfix expression in a binary tree
 Node* postfix_to_tree(char* postfix){
     // Check input format before processing
-    if (isPostfix(postfix) == 1) {
-        printf("Note: The expression is already in postfix form.\n");
-        return NULL;
-    }
-    else if (isInfix(postfix) == 1) {
+    if (isInfix(postfix) == 1) {
         printf("Error: Malformed expression. Detected infix format.\n");
         printf("Hint: Expression must be in postfix form.\n");
         return NULL;
@@ -625,7 +638,7 @@ Node* postfix_to_tree(char* postfix){
         Stack* stack = NULL; // Initialize an empty stack
 
         // Loop through each character in the string until null terminator is found
-        for(int i=0; postfix[i] != '\0'; i++){
+        for(int i = 0; postfix[i] != '\0'; i++){
             char token = postfix[i]; // Each character is stored in token variable
     
             if(isASpace(token)){ // If token is a space, proceed to next character
