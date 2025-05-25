@@ -275,42 +275,28 @@ int isInfix(const char* infix) {
 
 // Function to convert from infix to postfix using the Shunting Yard Algorithm
 void infix_to_postfix(const char* infix, char* postfix) {
-    // Check input format before processing
+    // Check for malformed input before processing
     if (isPostfix(infix) == 1) {
-        printf("Error: Malformed expression. Detected postfix format.\n");
-        printf("Hint: Expression must be in infix form.\n");
+        printf("Error: Malformed Expression (This is a postfix expression).\n");
         return;
     } else if (isPrefix(infix) == 1) {
-        printf("Error: Malformed expression. Detected prefix format.\n");
-        printf("Hint: Expression must be in infix form.\n");
+        printf("Error: Malformed Expression (This is a prefix expression).\n");
         return;
     }
-    
     // Validate infix expression
-    int validInfix = isInfix(infix);
-    if (validInfix != 1) {
-        switch (validInfix) {
-        case 0:
+    int validinfix = isInfix(infix);
+    if (validinfix != 1) {
+        if (validinfix == 0) {
             printf("Error: Invalid character or unbalanced parentheses.\n");
-            break;
-        case 2:
-            printf("Error: Malformed expression. Missing operand.\n");
-            break;
-        case 3:
-            printf("Error: Malformed expression. Missing operator.\n");
-            break;
-        default:
-            printf("Error: Invalid infix expression.\n");
+        } else if (validinfix == 2) {
+            printf("Error: Malformed expression (e.g., insufficient operand).\n");
+        } else if (validinfix == 3) {
+            printf("Error: Malformed expression (e.g., insufficient operator).\n");
         }
         return;
     }
-
     Stack* opStack = NULL; // Stack to hold operators
     int j = 0; // Index for postfix output
-
-    // Implicitly add opening parenthesis to handle the entire expression
-    push(&opStack, newNode('('));
-
     // Traverse the infix expression character by character
     for (int i = 0; infix[i]; i++) {
         char token = infix[i];
@@ -368,6 +354,7 @@ void infix_to_postfix(const char* infix, char* postfix) {
     // Pop any remaining operators from the stack to the output
     while (opStack) {
         Node* node = pop(&opStack);
+        // Skip if it's an opening parenthesis (shouldn't happen with valid input due to isInfix check)
         if (node->data == '(') {
             printf("Error: Mismatched opening parenthesis.\n");
             free(node);
