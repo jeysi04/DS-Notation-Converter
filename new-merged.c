@@ -274,6 +274,7 @@ int isInfix(const char* infix) {
 }
 
 // Function to convert from infix to postfix using the Shunting Yard Algorithm
+// Infix to postfix
 void infix_to_postfix(const char* infix, char* postfix) {
     // Check for malformed input before processing
     if (isPostfix(infix) == 1) {
@@ -354,12 +355,6 @@ void infix_to_postfix(const char* infix, char* postfix) {
     // Pop any remaining operators from the stack to the output
     while (opStack) {
         Node* node = pop(&opStack);
-        // Skip if it's an opening parenthesis (shouldn't happen with valid input due to isInfix check)
-        if (node->data == '(') {
-            printf("Error: Mismatched opening parenthesis.\n");
-            free(node);
-            return;
-        }
         if (j > 0) postfix[j++] = ' '; // Add space
         postfix[j++] = node->data; // Append remaining operator
         free(node);
