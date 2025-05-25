@@ -661,7 +661,7 @@ void printHelp() {
     printf("  --guide                   Show detailed usage guide\n\n");
     printf("Examples:\n");
     printf("  notation-converter --from prefix --to infix \"+ 1 * 2 3\"\n");
-    printf("  notation-converter --from infix --to postfix \"( 1 + 2 ) * 3\"\n");
+    printf("  notation-converter --from infix --to postfix \"(1 + 2) * 3\"\n");
     printf("  notation-converter --from postfix --to prefix \"1 2 3 * +\"\n");
     printf("  notation-converter -h\n");
     printf("  notation-converter --help\n");
