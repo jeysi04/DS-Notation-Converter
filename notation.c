@@ -191,11 +191,11 @@ int isPostfix(const char* postfix) {
 //function to put the postfix expression in a binary tree
 Node* postfix_to_tree(char* postfix){
     //checks whether the given expression is infix or prefix; if they are skip the process
-    if(isInfix(postfix)){
+    if(isInfix(postfix) == 1){
         printf("Error: Malformed Expression (This is an infix expression.).");
         return NULL;
     }
-    else if(isPrefix(postfix)){
+    else if(isPrefix(postfix) == 1){
         printf("Error: Malformed Expression (This is an prefix expression.).");
         return NULL;
     }
