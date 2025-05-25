@@ -173,7 +173,7 @@ int isPostfix(const char* postfix) {
         return 1; // The expression is valid
     else if (operatorCount + 1 > operandCount)
         return 2; // Insufficient operand
-    else if (operatorCount + 1 < operandCount )
+    else if (operatorCount < operandCount )
         return 3; // Insufficient operator
 }
 
@@ -258,7 +258,7 @@ int isPrefix(const char* prefix) {
         return 1; //the expression is valid
     else if(operatorCount + 1 > operandCount)
         return 2; //if operator is greater, insufficient operand
-    else if(operatorCount + 1 < operandCount)
+    else if(operatorCount < operandCount)
         return 3; //if operator is greater, insufficient operator
 }
 
