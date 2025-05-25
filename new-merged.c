@@ -544,7 +544,7 @@ int isPrefix(const char* prefix) {
         return 1; // The expression is valid
     else if(operatorCount + 1 > operandCount)
         return 2; // If operator is greater, insufficient operand
-    else if(operatorCount + 1 < operandCount)
+    else if(operatorCount < operandCount)
         return 3; // If operator is greater, insufficient operator
 }
 
@@ -615,7 +615,7 @@ int isPostfix(const char* postfix) {
         return 1; // The expression is valid
     else if (operatorCount + 1 > operandCount)
         return 2; // Insufficient operand
-    else if (operatorCount + 1 < operandCount )
+    else if (operatorCount < operandCount )
         return 3; // Insufficient operator
 }
 
@@ -703,12 +703,12 @@ void printGuide() {
     printf("Command-Line Options:\n");
     printf("  --from <input_format>        Specify input format (infix, prefix, or postfix)\n");
     printf("  --to <output_format>         Specify output format (infix, prefix, or postfix)\n");
-    printf("  \"<expression>\"               Space-separated expression string in double quotes\n");
+    printf("  \"<expression>\"               Expression string enclosed in double quotes\n");
     printf("  -h, --help                   Show brief usage help message\n");
     printf("  --guide                      Show this detailed program guide\n\n");
     printf("Expression Notations:\n");
     printf("  INFIX\n");
-    printf("    - Operators between operands, e.g., ( 1 + 2 ) * 3\n");
+    printf("    - Operators between operands, e.g., (1 + 2) * 3\n");
     printf("    - Parentheses required to ensure proper order\n\n");
     printf("  PREFIX (Polish)\n");
     printf("    - Operators precede operands, e.g., * + 1 2 3\n");
@@ -724,21 +724,21 @@ void printGuide() {
     printf("     - Pre-order Traversal   ->  Prefix Notation\n");
     printf("     - Post-order Traversal  ->  Postfix Notation\n\n");
     printf("Input Requirements:\n");
-    printf("  - Operands must be single-digit numbers (0-9).\n");
+    printf("  - Operands must be single-digit numbers (0-9) or letters of the\n");
+    printf("    alphabet (A-Z and a-z).\n");
     printf("  - Operators supported are addition (+), subtraction (-),\n");
     printf("    multiplication (*), and division (/).\n");
-    printf("  - Tokens (operands/operators) must be space-separated.\n");
     printf("  - Parentheses are allowed only in infix notation.\n\n");
     printf("Examples:\n");
     printf("  Convert prefix to infix:\n");
-    printf("    $ notation-converter --from prefix --to infix \"* + 1 2 3\"\n");
-    printf("    Output: ( ( 1 + 2 ) * 3 )\n\n");
+    printf("    $ notation-converter --from prefix --to infix \"* + A B C\"\n");
+    printf("    Output: ( ( A + B ) * C )\n\n");
     printf("  Convert infix to postfix:\n");
-    printf("    $ notation-converter --from infix --to postfix \"( 1 + 2 ) * 3\"\n");
-    printf("    Output: 1 2 + 3 *\n\n");
+    printf("    $ notation-converter --from infix --to postfix \"(A + B) * C\"\n");
+    printf("    Output: A B + C *\n\n");
     printf("  Convert postfix to prefix:\n");
-    printf("    $ notation-converter --from postfix --to prefix \"1 2 3 * +\"\n");
-    printf("    Output: + 1 * 2 3\n\n");
+    printf("    $ notation-converter --from postfix --to prefix \"A B C * +\"\n");
+    printf("    Output: + A * B C\n\n");
     printf("Error Handling:\n");
     printf("  The utility will detect and report errors such as:\n");
     printf("  - Missing or invalid arguments\n");
@@ -749,8 +749,11 @@ void printGuide() {
     printf("  - Memory allocation failure\n\n");
     printf("Notes:\n");
     printf("  - This version supports only basic arithmetic operations (+, -, *, /).\n");
-    printf("  - Only single-digit integers (0-9) are supported as operands.\n");
-    printf("  - Input expressions must be space-separated and enclosed in double quotes.\n");
+    printf("  - Only single-digit integers (0-9) and alphabetic characters (A-Z and a-z)\n");
+    printf("    are supported as operands.\n");
+    printf("  - Operands and operators may be separated by spaces.\n");
+    printf("  - Multi-character operands or complex expressions are not supported.\n");
+    printf("  - Input expressions must be enclosed in double quotes.\n");
     printf("  - Output expressions in infix form include full parentheses to preserve order.\n\n");
     printf("============================================================\n");
 }
