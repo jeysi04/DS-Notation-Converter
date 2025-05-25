@@ -20,7 +20,7 @@ Node* pop(Stack** top); //pops a tree node in the stack
 int isOperand(char ch); //checks if the character is an operand
 int isOperator(char ch); //checks if the character is an operator
 int isASpace(char ch); //checks if the character is a space
-int isPostfix(const char* postfix); //function to determine whether the expression is valid postfix
+int isPostfix(const char* postfix); //function to determine whether the expression is valid postfix   gcc notation-converter.c -o notation-converter.exe
 Node* postfix_to_tree(char* postfix); //function to put the postfix expression in a binary tree
 void skipSpaces(char* expr, int* index); //function to skip spaces
 int isPrefix(const char* prefix); //function to determine whether the expression is valid prefix
@@ -393,7 +393,10 @@ int isInfix(const char* infix) {
         return 3; //insufficient operator
 }
 
+//Infix to postfix 
+//Converts infix to postfix expresssion using shunting yard algorithm
 void infix_to_postfix(const char* infix, char* postfix) {
+    // Check for malformed input before processing
     if (isPostfix(infix) == 1) {
         printf("Error: Malformed Expression (This is a postfix expression).\n");
         return;
@@ -402,6 +405,7 @@ void infix_to_postfix(const char* infix, char* postfix) {
         return;
     }
 
+    // Validate infix expression
     int validinfix = isInfix(infix);
     if (validinfix != 1) {
         if (validinfix == 2) {
@@ -412,19 +416,26 @@ void infix_to_postfix(const char* infix, char* postfix) {
         return;
     }
 
-    Stack* opStack = NULL;
-    int j = 0;
+    Stack* opStack = NULL; // Stack to hold operators
+    int j = 0; // Index for postfix output
 
+    // Traverse the infix expression character by character
     for (int i = 0; infix[i]; i++) {
         char token = infix[i];
 
+        // Skip spaces
         if (isASpace(token)) continue;
 
+        // If the token is an operand, add it directly to the output
         if (isOperand(token)) {
             postfix[j++] = token;
             postfix[j++] = ' ';
+        
+        // If token is '(', push to operator stack
         } else if (token == '(') {
             push(&opStack, newNode(token));
+        
+        // If token is ')', pop from stack to output until '(' is found
         } else if (token == ')') {
             while (opStack && opStack->treeNode->data != '(') {
                 postfix[j++] = pop(&opStack)->data;
@@ -433,16 +444,20 @@ void infix_to_postfix(const char* infix, char* postfix) {
             if (opStack && opStack->treeNode->data == '(') {
                 pop(&opStack); // Remove '(' from the stack
             }
+        // If the token is an operator
         } else if (isOperator(token)) {
+            // Pop operators from the stack that have higher or equal precedence
             while (opStack && isOperator(opStack->treeNode->data) &&
                    precedence(opStack->treeNode->data) >= precedence(token)) {
                 postfix[j++] = pop(&opStack)->data;
                 postfix[j++] = ' ';
             }
+            // Push the current operator to the stack
             push(&opStack, newNode(token));
         }
     }
 
+    // Pop any remaining operators from the stack to the output
     while (opStack) {
         postfix[j++] = pop(&opStack)->data;
         postfix[j++] = ' ';
@@ -464,6 +479,7 @@ void reverse(char* str) {
 
 // Convert infix to prefix using operator and operand stacks
 void infix_to_prefix(const char* infix, char* prefix) {
+    // Check for malformed input before processing
     if (isPostfix(infix) == 1) {
         printf("Error: Malformed Expression (This is a postfix expression).\n");
         return;
@@ -472,6 +488,7 @@ void infix_to_prefix(const char* infix, char* prefix) {
         return;
     }
 
+    // Validate infix expression
     int validinfix = isInfix(infix);
     if (validinfix != 1) {
         if (validinfix == 2) {
@@ -482,7 +499,7 @@ void infix_to_prefix(const char* infix, char* prefix) {
         return;
     }
 
-    // Reverse the infix expression
+    // Reverse the infix expression and swap '(' with ')'
     int len = strlen(infix);
     char reversed[len + 1];
     int j = 0;
@@ -498,7 +515,7 @@ void infix_to_prefix(const char* infix, char* prefix) {
     }
     reversed[j] = '\0';
 
-    // Convert reversed infix to postfix
+    // Convert reversed infix to postfix 
     char tempPostfix[100];
     infix_to_postfix(reversed, tempPostfix);
 
