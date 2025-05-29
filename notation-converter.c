@@ -269,26 +269,36 @@ int isInfix(const char* infix) {
 
 // Function to convert from infix to postfix using the Shunting Yard Algorithm
 void infix_to_postfix(const char* infix, char* postfix) {
-    // Check for malformed input before processing
+    // Check input format before processing
     if (isPostfix(infix) == 1) {
-        printf("Error: Malformed Expression (This is a postfix expression).\n");
+        printf("Error: Malformed expression. Detected postfix format.\n");
+        printf("Hint: Expression must be in infix form.\n");
         return;
     } else if (isPrefix(infix) == 1) {
-        printf("Error: Malformed Expression (This is a prefix expression).\n");
+        printf("Error: Malformed expression. Detected prefix format.\n");
+        printf("Hint: Expression must be in infix form.\n");
         return;
     }
+
     // Validate infix expression
-    int validinfix = isInfix(infix);
-    if (validinfix != 1) {
-        if (validinfix == 0) {
+    int validInfix = isInfix(infix);
+    if (validInfix != 1) {
+        switch (validInfix) {
+        case 0:
             printf("Error: Invalid character or unbalanced parentheses.\n");
-        } else if (validinfix == 2) {
-            printf("Error: Malformed expression (e.g., insufficient operand).\n");
-        } else if (validinfix == 3) {
-            printf("Error: Malformed expression (e.g., insufficient operator).\n");
+            break;
+        case 2:
+            printf("Error: Malformed expression. Missing operand.\n");
+            break;
+        case 3:
+            printf("Error: Malformed expression. Missing operator.\n");
+            break;
+        default:
+            printf("Error: Invalid infix expression.\n");
         }
         return;
     }
+
     Stack* opStack = NULL; // Stack to hold operators
     int j = 0; // Index for postfix output
     // Traverse the infix expression character by character
