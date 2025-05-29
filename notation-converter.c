@@ -121,11 +121,9 @@ int main(int argc, char *argv[]) {
     if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "postfix") == 0)) { // Infix to postfix
         char postfix[100] = {0};
         infix_to_postfix(argv[5], postfix);
-        printf("%s", postfix);
     } else if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "prefix") == 0)) { // Infix to prefix
         char prefix[100] = {0};
         infix_to_prefix(argv[5], prefix);
-        printf("%s", prefix);
     } else if ((strcmp(argv[2], "prefix") == 0) && (strcmp(argv[4], "infix") == 0)) { // Prefix to infix
         int index = 0;
         Node* root = prefix_to_tree(argv[5], &index);
@@ -363,6 +361,7 @@ void infix_to_postfix(const char* infix, char* postfix) {
         free(node);
     }
     postfix[j] = '\0'; // Null-terminate the postfix string
+    printf("%s", postfix); // Print the postfix result inside the function
 }
 
 // Function to convert from infix to prefix using the Shunting Yard Algorithm
@@ -473,6 +472,7 @@ void infix_to_prefix(const char* infix, char* prefix) {
     strcpy(prefix, postfix);
     // Reverse the postfix to get prefix
     reverse(prefix);
+    printf("%s", prefix); // Print the prefix result inside the function
 }
 
 // Function to reverse a string and swaps parentheses for infix-to-prefix conversion
