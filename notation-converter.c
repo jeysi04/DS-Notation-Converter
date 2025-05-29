@@ -299,6 +299,8 @@ void infix_to_postfix(const char* infix, char* postfix) {
 
     Stack* opStack = NULL; // Stack to hold operators
     int j = 0; // Index for postfix output
+    int tokenCount = 0; // Track number of tokens to manage spaces
+
     // Traverse the infix expression character by character
     for (int i = 0; infix[i]; i++) {
         char token = infix[i];
@@ -309,8 +311,9 @@ void infix_to_postfix(const char* infix, char* postfix) {
             push(&opStack, newNode(token));
         // If the token is an operand, add it to the output
         } else if (isOperand(token)) {
-            if (j > 0) postfix[j++] = ' '; // Add space for token separation
+            if (tokenCount > 0) postfix[j++] = ' '; // Add space before token if not first
             postfix[j++] = token;
+            tokenCount++;
         // If token is ')', pop from stack to output until '(' is found
         } else if (token == ')') {
             if (!opStack) {
@@ -322,10 +325,11 @@ void infix_to_postfix(const char* infix, char* postfix) {
                 return;
             }
             while (opStack && opStack->treeNode->data != '(') {
-                if (j > 0) postfix[j++] = ' '; // Add space
+                if (tokenCount > 0) postfix[j++] = ' '; // Add space before operator
                 Node* node = pop(&opStack);
                 postfix[j++] = node->data; // Append popped operator
                 free(node);
+                tokenCount++;
             }
             if (opStack && opStack->treeNode->data == '(') {
                 Node* node = pop(&opStack); // Remove '(' from the stack
@@ -340,28 +344,27 @@ void infix_to_postfix(const char* infix, char* postfix) {
             }
         // If the token is an operator
         } else if (isOperator(token)) {
-            if (j > 0) postfix[j++] = ' '; // Add space
-            // Pop operators with higher or equal precedence
             while (opStack && isOperator(opStack->treeNode->data) &&
                    precedence(opStack->treeNode->data) >= precedence(token)) {
-                if (j > 0) postfix[j++] = ' '; // Add space
+                if (tokenCount > 0) postfix[j++] = ' '; // Add space before operator
                 Node* node = pop(&opStack);
                 postfix[j++] = node->data; // Append higher/equal precedence operator
                 free(node);
+                tokenCount++;
             }
-            // Push the current operator to the stack
             push(&opStack, newNode(token));
         }
     }
     // Pop any remaining operators from the stack to the output
     while (opStack) {
         Node* node = pop(&opStack);
-        if (j > 0) postfix[j++] = ' '; // Add space
+        if (tokenCount > 0) postfix[j++] = ' '; // Add space before operator
         postfix[j++] = node->data; // Append remaining operator
         free(node);
+        tokenCount++;
     }
     postfix[j] = '\0'; // Null-terminate the postfix string
-    printf("%s", postfix); // Print the postfix result inside the function
+    printf("%s\n", postfix); // Print with newline for clarity
 }
 
 // Function to convert from infix to prefix using the Shunting Yard Algorithm
@@ -397,7 +400,6 @@ void infix_to_prefix(const char* infix, char* prefix) {
     }
 
     // Reverse the infix expression and swap '(' with ')'
-    int len = strlen(infix);
     char reversed[100] = {0}; // Initialize to avoid garbage data
     strcpy(reversed, infix);
     reverse(reversed);
@@ -406,6 +408,7 @@ void infix_to_prefix(const char* infix, char* prefix) {
     char postfix[100] = {0}; // Initialize to avoid garbage data
     Stack* opStack = NULL; // Stack to hold operators
     int j = 0; // Index for postfix output
+    int tokenCount = 0; // Track number of tokens to manage spaces
 
     for (int i = 0; reversed[i]; i++) {
         char token = reversed[i];
@@ -416,8 +419,9 @@ void infix_to_prefix(const char* infix, char* prefix) {
             push(&opStack, newNode(token));
         // If the token is an operand, add it to the output
         } else if (isOperand(token)) {
-            if (j > 0) postfix[j++] = ' '; // Add space for token separation
+            if (tokenCount > 0) postfix[j++] = ' '; // Add space before token if not first
             postfix[j++] = token;
+            tokenCount++;
         // If token is ')', pop from stack to output until '(' is found
         } else if (token == ')') {
             if (!opStack) {
@@ -429,10 +433,11 @@ void infix_to_prefix(const char* infix, char* prefix) {
                 return;
             }
             while (opStack && opStack->treeNode->data != '(') {
-                if (j > 0) postfix[j++] = ' '; // Add space
+                if (tokenCount > 0) postfix[j++] = ' '; // Add space before operator
                 Node* node = pop(&opStack);
                 postfix[j++] = node->data; // Append popped operator
                 free(node);
+                tokenCount++;
             }
             if (opStack && opStack->treeNode->data == '(') {
                 Node* node = pop(&opStack); // Remove '(' from the stack
@@ -447,32 +452,32 @@ void infix_to_prefix(const char* infix, char* prefix) {
             }
         // If the token is an operator
         } else if (isOperator(token)) {
-            if (j > 0) postfix[j++] = ' '; // Add space
-            // Pop operators with strictly higher precedence
             while (opStack && isOperator(opStack->treeNode->data) &&
                    precedence(opStack->treeNode->data) > precedence(token)) {
-                if (j > 0) postfix[j++] = ' '; // Add space
+                if (tokenCount > 0) postfix[j++] = ' '; // Add space before operator
                 Node* node = pop(&opStack);
                 postfix[j++] = node->data; // Append higher precedence operator
                 free(node);
+                tokenCount++;
             }
-            // Push the current operator to the stack
             push(&opStack, newNode(token));
         }
     }
     // Pop any remaining operators from the stack to the output
     while (opStack) {
         Node* node = pop(&opStack);
-        if (j > 0) postfix[j++] = ' '; // Add space
+        if (tokenCount > 0) postfix[j++] = ' '; // Add space before operator
         postfix[j++] = node->data; // Append remaining operator
         free(node);
+        tokenCount++;
     }
     postfix[j] = '\0'; // Null-terminate the postfix string
+
+    // Reverse the postfix to get prefix
     prefix[0] = '\0'; // Initialize prefix to empty string
     strcpy(prefix, postfix);
-    // Reverse the postfix to get prefix
     reverse(prefix);
-    printf("%s", prefix); // Print the prefix result inside the function
+    printf("%s\n", prefix); // Print with newline for clarity
 }
 
 // Function to reverse a string and swaps parentheses for infix-to-prefix conversion
