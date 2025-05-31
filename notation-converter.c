@@ -51,7 +51,7 @@ void printGuide(); // Prints detailed guide with explanations and examples
 // Main function to handle command-line arguments and perform notation conversions
 int main(int argc, char *argv[]) {
     // Help or guide checks
-    if (argc > 1) {
+    if (argc == 2) {
         // Validate argument for help or guide
         if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
             // Display help information
@@ -85,59 +85,68 @@ int main(int argc, char *argv[]) {
         printf("Error: Missing '--to' argument.\n");
         return 1;
     }
+
+    // Extract input format, output format, and expression from command-line arguments
+    const char *input_format = argv[2];     // Input format
+    const char *output_format = argv[4];    // Output format
+    char *expression = argv[5];             // Expression to convert
     
     // Validate format specifiers
-    if (strcmp(argv[2], "infix") != 0 && strcmp(argv[2], "prefix") != 0 && strcmp(argv[2], "postfix") != 0) {
-        printf("Error: Invalid format specifier '%s'.\n", argv[2]);
+    if (strcmp(input_format, "infix") != 0 && strcmp(input_format, "prefix") != 0 && strcmp(input_format, "postfix") != 0) {
+        printf("Error: Invalid format specifier '%s'.\n", input_format);
         printf("Hint: Use 'infix', 'prefix', or 'postfix'.\n");
         return 1;
-    } else if (strcmp(argv[4], "infix") != 0 && strcmp(argv[4], "prefix") != 0 && strcmp(argv[4], "postfix") != 0) {
-        printf("Error: Invalid format specifier '%s'.\n", argv[4]);
+    } else if (strcmp(output_format, "infix") != 0 && strcmp(output_format, "prefix") != 0 && strcmp(output_format, "postfix") != 0) {
+        printf("Error: Invalid format specifier '%s'.\n", output_format);
         printf("Hint: Use 'infix', 'prefix', or 'postfix'.\n");
         return 1;
     }
 
     // Check if input and output formats are the same
-    if (strcmp(argv[2], argv[4]) == 0) {
+    if (strcmp(input_format, output_format) == 0) {
         int valid = 1;
-        if (strcmp(argv[2], "infix") == 0)
-            valid = isInfix(argv[5]);
-        else if (strcmp(argv[2], "prefix") == 0)
-            valid = isPrefix(argv[5]);
-        else if (strcmp(argv[2], "postfix") == 0)
-            valid = isPostfix(argv[5]);
+        if (strcmp(input_format, "infix") == 0)
+            valid = isInfix(expression);
+        else if (strcmp(input_format, "prefix") == 0)
+            valid = isPrefix(expression);
+        else if (strcmp(input_format, "postfix") == 0)
+            valid = isPostfix(expression);
 
         if (valid == 0 || valid == 2 || valid == 3) {
-            printf("Error: Expression is not a valid %s expression.\n", argv[2]);
+            printf("Error: Expression is not a valid %s expression.\n", input_format);
             return 1;
         }
 
-        printf("Note: The expression is already in %s form.\n", argv[2]);
+        printf("Note: The expression is already in %s form.\n", input_format);
         return 0;
     }
 
     // If input and output formats are different
     // Perform conversions based on input and output formats
-    if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "postfix") == 0)) { // Infix to postfix
+    if ((strcmp(input_format, "infix") == 0) && (strcmp(output_format, "postfix") == 0)) { // Infix to postfix
         char postfix[100] = {0};
-        infix_to_postfix(argv[5], postfix);
-    } else if ((strcmp(argv[2], "infix") == 0) && (strcmp(argv[4], "prefix") == 0)) { // Infix to prefix
+        infix_to_postfix(expression, postfix);
+    } else if ((strcmp(input_format, "infix") == 0) && (strcmp(output_format, "prefix") == 0)) { // Infix to prefix
         char prefix[100] = {0};
-        infix_to_prefix(argv[5], prefix);
-    } else if ((strcmp(argv[2], "prefix") == 0) && (strcmp(argv[4], "infix") == 0)) { // Prefix to infix
+        infix_to_prefix(expression, prefix);
+    } else if ((strcmp(input_format, "prefix") == 0) && (strcmp(output_format, "infix") == 0)) { // Prefix to infix
         int index = 0;
-        Node* root = prefix_to_tree(argv[5], &index);
+        Node* root = prefix_to_tree(expression, &index);
         inorder_Traversal(root);
-    } else if ((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "infix") == 0)) { // Postfix to infix
-        Node* root = postfix_to_tree(argv[5]);
+    } else if ((strcmp(input_format, "postfix") == 0) && (strcmp(output_format, "infix") == 0)) { // Postfix to infix
+        Node* root = postfix_to_tree(expression);
         inorder_Traversal(root);
-    } else if ((strcmp(argv[2], "postfix") == 0) && (strcmp(argv[4], "prefix") == 0)) { // Postfix to prefix
-        Node* root = postfix_to_tree(argv[5]);
+    } else if ((strcmp(input_format, "postfix") == 0) && (strcmp(output_format, "prefix") == 0)) { // Postfix to prefix
+        Node* root = postfix_to_tree(expression);
         preorder_Traversal(root);
-    } else if ((strcmp(argv[2], "prefix") == 0) && (strcmp(argv[4], "postfix") == 0)) { // Prefix to postfix
+    } else if ((strcmp(input_format, "prefix") == 0) && (strcmp(output_format, "postfix") == 0)) { // Prefix to postfix
         int index = 0;
-        Node* root = prefix_to_tree(argv[5], &index);
+        Node* root = prefix_to_tree(expression, &index);
         postorder_Traversal(root);
+    } else {
+        printf("Error: Unsupported format conversion from %s to %s.\n", input_format, output_format);
+        printf("Try '%s --help' for more information.\n", argv[0]);
+        return 1;
     }
 
     // Exit program
