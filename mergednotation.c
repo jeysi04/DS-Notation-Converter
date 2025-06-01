@@ -590,16 +590,20 @@ Node* prefix_to_tree(char* prefix, int* index) {
 void prefix_to_infix(char *expression){
     int index = 0;
     Node* root = prefix_to_tree(expression, &index);
-    inorder_Traversal(root);
-    printf("\n");
+    if(root != NULL){
+        inorder_Traversal(root);
+        printf("\n");
+    }
 }
 
 // Function to convert prefix expression to postfix expression
 void prefix_to_postfix(char * expression){
     int index = 0;
     Node* root = prefix_to_tree(expression, &index);
-    postorder_Traversal(root);
-    printf("\n");
+    if(root != NULL){
+        postorder_Traversal(root);
+        printf("\n");
+    }
 }
 
 // Function to determine whether the expression is in valid postfix format
@@ -680,15 +684,19 @@ Node* postfix_to_tree(char* postfix){
 // Function to convert postfix expression to infix expression
 void postfix_to_infix(char *expression){
     Node* root = postfix_to_tree(expression);
-    inorder_Traversal(root);
-    printf("\n");
+    if(root != NULL){
+        inorder_Traversal(root);
+        printf("\n");
+    }
 }
 
 // Function to convert postfix expression to prefix expression
 void postfix_to_prefix(char *expression){
     Node* root = postfix_to_tree(expression);
-    preorder_Traversal(root);
-    printf("\n");
+    if(root != NULL){
+        preorder_Traversal(root);
+        printf("\n");
+    }
 }
 
 // Function to print help information
