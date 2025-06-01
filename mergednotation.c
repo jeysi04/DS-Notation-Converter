@@ -43,8 +43,12 @@ void infix_to_prefix(const char* infix, char* prefix); // Converts infix to pref
 void reverse(char* str); // Reverses a string (used for infix to prefix conversion)
 int isPrefix(const char* prefix); // Determines whether the expression is valid prefix
 Node* prefix_to_tree(char* prefix, int* index); // Puts the prefix expression in a binary tree
+void prefix_to_infix(char *expression); // Function to convert prefix expression to infix expression
+void prefix_to_postfix(char * expression); // Function to convert prefix expression to postfix expression
 int isPostfix(const char* postfix); // Determines whether the expression is valid postfix
 Node* postfix_to_tree(char* postfix); // Puts the postfix expression in a binary tree
+void postfix_to_infix(char *expression); // Function to convert postfix expression to infix expression
+void postfix_to_prefix(char *expression); // Function to convert postfix expression to prefix expression
 void printHelp(); // Prints help information
 void printGuide(); // Prints detailed guide with explanations and examples
 
@@ -127,23 +131,13 @@ int main(int argc, char *argv[]) {
         char prefix[100] = {0};
         infix_to_prefix(expression, prefix);
     } else if ((strcmp(input_format, "prefix") == 0) && (strcmp(output_format, "infix") == 0)) { // Prefix to infix
-        int index = 0;
-        Node* root = prefix_to_tree(expression, &index);
-        inorder_Traversal(root);
-        printf("\n");
+        prefix_to_infix(expression);
     } else if ((strcmp(input_format, "postfix") == 0) && (strcmp(output_format, "infix") == 0)) { // Postfix to infix
-        Node* root = postfix_to_tree(expression);
-        inorder_Traversal(root);
-        printf("\n");
+        postfix_to_infix(expression);
     } else if ((strcmp(input_format, "postfix") == 0) && (strcmp(output_format, "prefix") == 0)) { // Postfix to prefix
-        Node* root = postfix_to_tree(expression);
-        preorder_Traversal(root);
-        printf("\n");
+        postfix_to_prefix(expression);
     } else if ((strcmp(input_format, "prefix") == 0) && (strcmp(output_format, "postfix") == 0)) { // Prefix to postfix
-        int index = 0;
-        Node* root = prefix_to_tree(expression, &index);
-        postorder_Traversal(root);
-        printf("\n");
+        prefix_to_postfix(expression);
     } else {
         printf("Error: Unsupported format conversion from %s to %s.\n", input_format, output_format);
         printf("Try '%s --help' for more information.\n", argv[0]);
@@ -592,6 +586,22 @@ Node* prefix_to_tree(char* prefix, int* index) {
     return NULL;
 }
 
+// Function to convert prefix expression to infix expression
+void prefix_to_infix(char *expression){
+    int index = 0;
+    Node* root = prefix_to_tree(expression, &index);
+    inorder_Traversal(root);
+    printf("\n");
+}
+
+// Function to convert prefix expression to postfix expression
+void prefix_to_postfix(char * expression){
+    int index = 0;
+    Node* root = prefix_to_tree(expression, &index);
+    postorder_Traversal(root);
+    printf("\n");
+}
+
 // Function to determine whether the expression is in valid postfix format
 int isPostfix(const char* postfix) {
     int operandCount = 0; 
@@ -665,6 +675,20 @@ Node* postfix_to_tree(char* postfix){
     else if(validPostfix == 3){
         printf("Error: Malformed expression. Missing operator.\n");
     }
+}
+
+// Function to convert postfix expression to infix expression
+void postfix_to_infix(char *expression){
+    Node* root = postfix_to_tree(expression);
+    inorder_Traversal(root);
+    printf("\n");
+}
+
+// Function to convert postfix expression to prefix expression
+void postfix_to_prefix(char *expression){
+    Node* root = postfix_to_tree(expression);
+    preorder_Traversal(root);
+    printf("\n");
 }
 
 // Function to print help information
