@@ -130,16 +130,20 @@ int main(int argc, char *argv[]) {
         int index = 0;
         Node* root = prefix_to_tree(expression, &index);
         inorder_Traversal(root);
+        printf("\n");
     } else if ((strcmp(input_format, "postfix") == 0) && (strcmp(output_format, "infix") == 0)) { // Postfix to infix
         Node* root = postfix_to_tree(expression);
         inorder_Traversal(root);
+        printf("\n");
     } else if ((strcmp(input_format, "postfix") == 0) && (strcmp(output_format, "prefix") == 0)) { // Postfix to prefix
         Node* root = postfix_to_tree(expression);
         preorder_Traversal(root);
+        printf("\n");
     } else if ((strcmp(input_format, "prefix") == 0) && (strcmp(output_format, "postfix") == 0)) { // Prefix to postfix
         int index = 0;
         Node* root = prefix_to_tree(expression, &index);
         postorder_Traversal(root);
+        printf("\n");
     } else {
         printf("Error: Unsupported format conversion from %s to %s.\n", input_format, output_format);
         printf("Try '%s --help' for more information.\n", argv[0]);
