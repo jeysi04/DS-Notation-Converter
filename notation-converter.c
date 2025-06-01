@@ -51,17 +51,14 @@ void printGuide(); // Prints detailed guide with explanations and examples
 // Main function to handle command-line arguments and perform notation conversions
 int main(int argc, char *argv[]) {
     // Help or guide checks
-    if (argc == 2) {
-        // Validate argument for help or guide
-        if (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0) {
-            // Display help information
-            printHelp();
-            return 0;
-        } else if (strcmp(argv[1], "--guide") == 0) {
-            // Display detailed guide
-            printGuide();
-            return 0;
-        } 
+    if (argc == 1 || (argc == 2 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0))) {
+        // Display help information
+        printHelp();
+        return 0;
+    } else if (argc == 2 && strcmp(argv[1], "--guide") == 0) {
+        // Display detailed guide
+        printGuide();
+        return 0;
     }
     
     // Check for argument count
@@ -373,7 +370,7 @@ void infix_to_postfix(const char* infix, char* postfix) {
         tokenCount++;
     }
     postfix[j] = '\0'; // Null-terminate the postfix string
-    printf("%s\n", postfix); // Print with newline for clarity
+    printf("%s\n", postfix); // Print converted expression
 }
 
 // Function to convert from infix to prefix using the Shunting Yard Algorithm
@@ -486,7 +483,7 @@ void infix_to_prefix(const char* infix, char* prefix) {
     prefix[0] = '\0'; // Initialize prefix to empty string
     strcpy(prefix, postfix);
     reverse(prefix);
-    printf("%s\n", prefix); // Print with newline for clarity
+    printf("%s\n", prefix); // Print Print converted expression
 }
 
 // Function to reverse a string and swaps parentheses for infix-to-prefix conversion
