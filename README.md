@@ -58,8 +58,6 @@ The **Notation Converter** is a command-line utility written in C that allows us
     - In-order traversal produces the infix form of the expression.
     - Pre-order traversal produces the prefix form of the expression.
     - Post-order traversal produces the postfix form of the expression.
-* **Modular and Reusable Design**
-  + The code is organized into distinct modules for parsing, validation, tree construction, conversion, and other helper functions. This modularity makes the program easier to understand, debug, and extend with additional features.
 * **Error Handling**
   + The program includes error handling to detect and respond to common issues, such as missing arguments, invalid notations, or incorrect expression formats. Clear and helpful error messages are displayed to guide users in correcting their input.
 
@@ -91,7 +89,7 @@ If GCC is not installed, follow the instructions below based on your operating s
   + Download **MinGW - Minimalist GNU for Windows** from [https://osdn.net/projects/mingw/releases/.](https://sourceforge.net/projects/mingw/)
   + Run the installer and select the package: mingw32-gcc-g++ under **Basic Setup**.
   + Click Installation and apply changes in the menu to complete installation.
-  + After installation, verify GCC:
+  + After installation, verify GCC in your terminal:
     ```sh
        gcc --version
     ```
@@ -146,18 +144,17 @@ Once your system meets the prerequisites, set up the Notation Converter - save o
 ### Compilation
 
 To compile the program, ensure you have a C compiler installed. The most commonly used compiler is `gcc` (GNU Compiler Collection), which is available on all major platforms.
-* For **Windows**, use the following command:
-  ```sh
-     gcc notation-converter.c -o notation-converter.exe
-  ```
-    > * `gcc`: The GNU Compiler Collection, commonly used for compiling C programs.
-    > * `notation-converter.c`: The main C source file of the program.
-    > * `-o notation-converter.exe`: Specifies the name of the output executable file.
-* For **Linux** or **macOS**, use the same command, adjusting the output file name if desired:
-  ```sh
-     gcc notation-converter.c -o notation-converter
-  ```
-    > * Unlike Windows, the `.exe` extension is not required on Unix-based systems.
+
+_Note: If GCC is not installed, follow the GCC installation steps provided earlier._
+
+In your terminal, use the following command:
+```sh
+   gcc notation-converter.c -o notation-converter
+```
+* `gcc`: The GNU Compiler Collection, commonly used for compiling C programs.
+* `notation-converter.c`: The main C source file of the program.
+* `-o notation-converter.exe`: Specifies the name of the output executable file.
+> On Windows, this will generate `notation-converter.exe`. On Linux/macOS, it creates `notation-converter`.
 
 ### Usage
 
@@ -166,11 +163,11 @@ After compilation, the program is executed from the command line using a specifi
    ```sh
       notation-converter --from <input_format> --to <output_format> "<expression>"
    ```
-   > * `notation-converter`: The command used to run the program in the terminal.
-   >   + The exact format depends on your operating system: use `notation-converter.exe` on Windows, and `./notation-converter` on Linux or macOS.
-   > * `--from <input_format>`: Specifies the format of the input expression.
-   > * `--to <output_format>`: Specifies the desired output format.
-   > * `"<expression>"`: The expression to be converted. It must be enclosed in double quotes.
+   * `notation-converter`: The command used to run the program in the terminal.
+      + The exact format depends on your operating system: use `notation-converter.exe` on Windows, and `./notation-converter` on Linux or macOS.
+   * `--from <input_format>`: Specifies the format of the input expression.
+   * `--to <output_format>`: Specifies the desired output format.
+   * `"<expression>"`: The expression to be converted. It must be enclosed in double quotes.
 2. To display the `help` option with a brief usage summary:
    * Either:
      ```sh
