@@ -538,6 +538,9 @@ int isPrefix(const char* prefix) {
         char token = prefix[i];
         if (isASpace(token)) continue; // If space, proceed to next character
 
+        if (token == '(' || token == ')') // If expression has parenthesis, return -1
+            return -1;
+
         if (isOperand(token)) {
             operandCount++; // Add operand count
         } else if (isOperator(token)) {
@@ -554,7 +557,7 @@ int isPrefix(const char* prefix) {
     else if(operatorCount + 1 > operandCount)
         return 2; // If operator is greater, insufficient operand
     else if(operatorCount < operandCount)
-        return 3; // If operator is greater, insufficient operator
+        return 3; // If operand is greater, insufficient operator
 }
 
 // Function to put the prefix expression in a binary tree
@@ -597,8 +600,11 @@ Node* prefix_to_tree(char* prefix, int* index) {
         printf("Error: Malformed expression. Missing operand.\n");
     } else if (validPrefix == 3) {
         printf("Error: Malformed expression. Missing operator.\n");
+    } else if (validPrefix == -1) {
+        printf("Error: Invalid character. Prefix notation should not contain parentheses.\n");
     }
-    return NULL;
+
+    return NULL; // If invalid prefix, return NULL
 }
 
 // Function to convert prefix expression to infix expression
@@ -629,6 +635,9 @@ int isPostfix(const char* postfix) {
         char token = postfix[i];
 
         if (isASpace(token)) continue; // Proceed to next character if space
+
+        if (token == '(' || token == ')') // If expression has parenthesis, return -1
+            return -1;
 
         if (isOperand(token)) {
             operandCount++; // Each operand adds one
@@ -663,7 +672,7 @@ Node* postfix_to_tree(char* postfix){
 
     int validPostfix = isPostfix(postfix);
 
-    if(validPostfix == 1){
+    if (validPostfix == 1) {
         Stack* stack = NULL; // Initialize an empty stack
 
         // Loop through each character in the string until null terminator is found
@@ -688,12 +697,17 @@ Node* postfix_to_tree(char* postfix){
         }
         return pop(&stack);
     }
-    else if(validPostfix == 2){
+    else if (validPostfix == 2) {
         printf("Error: Malformed expression. Missing operand.\n");
     }
-    else if(validPostfix == 3){
+    else if (validPostfix == 3) {
         printf("Error: Malformed expression. Missing operator.\n");
     }
+    else if (validPostfix == -1) {
+        printf("Error: Invalid character. Postfix notation should not contain parentheses.\n");
+    }
+
+    return NULL; // If invalid postfix, return NULL
 }
 
 // Function to convert postfix expression to infix expression
