@@ -1,0 +1,79 @@
+----- ARGUMENT ERRORS -----
+# Show help message if no arguments are provided
+notation-converter
+
+# Missing required arguments
+notation-converter --from infix
+
+# Too many arguments
+notation-converter --from infix --to postfix "1 + 2" extra
+notation-converter --from infix --to postfix 1 + 2
+
+----- FORMAT SPECIFICATION ERRORS -----
+# Invalid input and output formats
+notation-converter --from infx --to pstfix "A + B * C"
+
+# Invalid input format
+notation-converter --from hello --to postfix "1 + 2"
+
+# Invalid output format
+notation-converter --from infix --to newfix "1 + 2"
+
+# Same input and output format
+notation-converter --from infix --to infix "1 + 2"
+
+# Same input and output format but invalid expression
+notation-converter --from infix --to infix "+ A B"
+
+----- EXPRESSION VALIDATION ERRORS -----
+# INFIX
+# Missing operand
+notation-converter --from infix --to postfix "1 + "
+
+# Missing operator
+notation-converter --from infix --to postfix "1 2"
+
+# Unbalanced parentheses
+notation-converter --from infix --to postfix "(1 + 2"
+
+# Invalid character
+notation-converter --from infix --to postfix "1 @ 2"
+
+# PREFIX
+# Missing operand
+notation-converter --from prefix --to infix "+ 1"
+
+# Invalid prefix detected as postfix
+notation-converter --from prefix --to infix "1 2 +"
+
+# POSTFIX
+# Missing operator
+notation-converter --from postfix --to infix "1 2"
+
+# Invalid postfix detected as infix
+notation-converter --from postfix --to infix "1 + 2"
+
+----- CONVERSION ERRORS -----
+# Unsupported conversion
+notation-converter --from prefix --to prefix "+ 1 2"
+
+# Malformed expression during conversion (missing operand)
+notation-converter --from postfix --to infix "1 2 + *"
+notation-converter --from prefix --to postfix "+ * 1"
+
+# Invalid expression of the specified input format
+notation-converter --from postfix --to infix "+ 1 2" 
+
+----- PARENTHESES ERRORS -----
+# Parentheses in prefix
+notation-converter --from prefix --to postfix "(+ 1 2)"
+
+# Parentheses in postfix
+notation-converter --from postfix --to infix "1 2 ) + ("
+
+----- MULTI-DIGIT/CHARACTER ERRORS -----
+# Multi-digit numbers
+notation-converter --from infix --to postfix "10 + 20"
+
+# Invalid characters
+notation-converter --from infix --to postfix "a + $"
