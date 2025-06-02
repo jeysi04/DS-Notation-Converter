@@ -5,7 +5,7 @@
   <p align="center">
     A command-line utility in C to convert mathematical expressions between infix, prefix, and postfix notations using expression trees.
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore files >></strong></a>
+    <a href="https://github.com/jeysi04/DS-Notation-Converter"><strong>Explore files >></strong></a>
     <br />
     <br />
   </p>
