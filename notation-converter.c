@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
-        printf("Note: The expression is already in %s form.\n", input_format);
+        printf("Note: The expression is already in %s form. No conversion required.\n", input_format);
         return 0;
     }
 
