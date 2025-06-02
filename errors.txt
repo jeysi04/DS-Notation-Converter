@@ -72,7 +72,7 @@ notation-converter --from prefix --to postfix "(+ 1 2)"
 notation-converter --from postfix --to infix "1 2 ) + ("
 
 ----- MULTI-DIGIT/CHARACTER ERRORS -----
-# Multi-digit numbers
+# Multi-digit numbers (malformed expression)
 notation-converter --from infix --to postfix "10 + 20"
 
 # Invalid characters

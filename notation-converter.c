@@ -51,6 +51,7 @@ int isPostfix(const char* postfix); // Determines whether the expression is vali
 Node* postfix_to_tree(char* postfix); // Puts the postfix expression in a binary tree
 void postfix_to_infix(char *expression); // Function to convert postfix expression to infix expression
 void postfix_to_prefix(char *expression); // Function to convert postfix expression to prefix expression
+void free_tree(Node* root); // Frees the memory allocated for the binary tree
 void printHelp(); // Prints help information
 void printGuide(); // Prints detailed guide with explanations and examples
 
@@ -113,7 +114,7 @@ int main(int argc, char *argv[]) {
     if (strcmp(input_format, output_format) == 0) {
         int valid = isValidExpression(input_format, expression);
 
-        if (valid == 0 || valid == 2 || valid == 3) {
+        if (valid != 1) {
             printf("Error: Expression is not a valid %s expression.\n", input_format);
             return 1;
         }
@@ -166,6 +167,10 @@ int isValidExpression(const char *format, char *expression) {
 // Creates new binary node with the given operator or operand
 Node* newNode(char op) {
     Node* node = (Node*)malloc(sizeof(Node));
+    if (node == NULL) {
+        printf("Error: Memory allocation failed for new node.\n");
+        exit(EXIT_FAILURE); // Exit if memory allocation fails
+    }
     node->data = op;
     node->left = node->right = NULL;
     return node;
@@ -174,6 +179,10 @@ Node* newNode(char op) {
 // Pushes a tree node onto the stack
 void push(Stack** top, Node* node) {
     Stack* newStackNode = (Stack*)malloc(sizeof(Stack));
+    if (newStackNode == NULL) {
+        printf("Error: Memory allocation failed for stack node.\n");
+        exit(EXIT_FAILURE); // Exit if memory allocation fails
+    }
     newStackNode->treeNode = node;
     newStackNode->next = *top;
     *top = newStackNode;
@@ -552,11 +561,11 @@ int isPrefix(const char* prefix) {
         }
     }
 
-    if(operatorCount > operandCount || (operatorCount == 1 && operandCount == 1)) // If equal
+    if (operatorCount > operandCount || (operatorCount == 1 && operandCount == 1)) // If equal
         return 1; // The expression is valid
-    else if(operatorCount + 1 > operandCount)
+    else if (operatorCount + 1 > operandCount)
         return 2; // If operator is greater, insufficient operand
-    else if(operatorCount < operandCount)
+    else if (operatorCount < operandCount)
         return 3; // If operand is greater, insufficient operator
 }
 
@@ -614,6 +623,7 @@ void prefix_to_infix(char *expression) {
     if(root != NULL){
         inorder_Traversal(root);
         printf("\n");
+        free_tree(root);
     }
 }
 
@@ -624,6 +634,7 @@ void prefix_to_postfix(char * expression) {
     if(root != NULL){
         postorder_Traversal(root);
         printf("\n");
+        free_tree(root);
     }
 }
 
@@ -716,6 +727,7 @@ void postfix_to_infix(char *expression) {
     if(root != NULL){
         inorder_Traversal(root);
         printf("\n");
+        free_tree(root);
     }
 }
 
@@ -725,7 +737,16 @@ void postfix_to_prefix(char *expression) {
     if(root != NULL){
         preorder_Traversal(root);
         printf("\n");
+        free_tree(root);
     }
+}
+
+// Function to free the memory allocated for the binary tree
+void free_tree(Node* root) {
+    if (root == NULL) return;
+    free_tree(root->left);
+    free_tree(root->right);
+    free(root);
 }
 
 // Function to print help information
