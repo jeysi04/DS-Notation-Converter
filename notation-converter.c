@@ -601,7 +601,7 @@ Node* prefix_to_tree(char* prefix, int* index) {
     } else if (validPrefix == 3) {
         printf("Error: Malformed expression. Missing operator.\n");
     } else if (validPrefix == -1) {
-        printf("Error: Invalid character. Prefix notation should not contain parentheses.\n");
+        printf("Error: Malformed expression. Prefix notation should not contain parentheses.\n");
     }
 
     return NULL; // If invalid prefix, return NULL
@@ -704,7 +704,7 @@ Node* postfix_to_tree(char* postfix){
         printf("Error: Malformed expression. Missing operator.\n");
     }
     else if (validPostfix == -1) {
-        printf("Error: Invalid character. Postfix notation should not contain parentheses.\n");
+        printf("Error: Malformed expression. Postfix notation should not contain parentheses.\n");
     }
 
     return NULL; // If invalid postfix, return NULL
