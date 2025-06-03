@@ -463,10 +463,6 @@ void infix_to_prefix(const char* infix, char* prefix) {
                 free(node);
             } else {
                 printf("Error: Mismatched closing parenthesis.\n");
-                while (opStack) {
-                    Node* node = pop(&opStack);
-                    free(node);
-                }
                 return;
             }
         // If the token is an operator
