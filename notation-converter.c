@@ -513,11 +513,6 @@ void reverse(char* str) {
         i++;
         j--;
     }
-    // Handle middle character if length is odd
-    if (i == j) {
-        if (str[i] == '(') str[i] = ')';
-        else if (str[i] == ')') str[i] = '(';
-    }
 }
 
 // Function to determine whether the expression is in valid prefix format
